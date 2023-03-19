@@ -14,9 +14,9 @@
 
 .connect {
   display: flex;
-  justify-content: flex-start;
-  margin: 1rem;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin: 0rem 0.5rem;
+  /* align-items: center; */
 }
 .main {
 }

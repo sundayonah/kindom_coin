@@ -1,5 +1,5 @@
 import { useContract, useContractWrite } from "@thirdweb-dev/react";
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 
 const Main = () => {
   const { contract } = useContract(
