@@ -15,8 +15,11 @@
 .connect {
   display: flex;
   justify-content: space-between;
-  margin: 0rem 0.5rem;
-  /* align-items: center; */
+  margin: 0rem 0.7rem;
+  align-items: center;
+  /* border-bottom: 1px solid #ffffff; */
+  /* width: 100%; */
+  /* background-color: rgb(214, 209, 57); */
 }
 .main {
 }
@@ -39,7 +42,6 @@
   padding: 20px;
   border: 1px solid #888;
   width: 30%;
-
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
 }
 
