@@ -1,5 +1,6 @@
 import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
 import "../styles/globals.css";
+import { TransactionProvider } from "./components/ReactContext";
 
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
@@ -9,7 +10,9 @@ const activeChainId = ChainId.BinanceSmartChainTestnet;
 function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider activeChain={activeChainId}>
-      <Component {...pageProps} />
+      <TransactionProvider>
+        <Component {...pageProps} />
+      </TransactionProvider>
     </ThirdwebProvider>
   );
 }

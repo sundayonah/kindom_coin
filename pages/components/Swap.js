@@ -1,49 +1,17 @@
-import {
-  useAddress,
-  //   useContract,
-  //   useContractRead,
-  //   useContractWrite,
-  //   Web3Button,
-} from "@thirdweb-dev/react";
 import { ethers } from "ethers";
-import routerAbi from "./contract/routerAbi.json";
-import { useEffect, useState } from "react";
+import { useState, useContext } from "react";
 import { RiArrowDownSFill } from "react-icons/ri";
 import Image from "next/image";
 import Logo from "../components/images/logo.png";
 import { Button, Modal, Popover } from "antd";
+import { TransactionContext } from "./ReactContext";
+import tokenList from "./tokenList.json";
 
 export default function MyComponent() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const address = useAddress();
-  console.log(address, "user address ...,.,.,..,..,.,user");
   const [status, setStatus] = useState(false);
 
-  const contractAddress = "0x7872D3C3Ebc9152daEeC572311E9A51724ff70A5";
-
-  const handleClick = async () => {
-    // setStatus("pending");
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, routerAbi, signer);
-      const amount = ethers.utils.parseUnits("0.1", "gwei");
-      console.log(amount, "yuyuyuyuyu");
-
-      const tx = await contract.deposit(address, amount, {
-        gasLimit: 500000,
-        gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-      });
-
-      console.log(address, "Deposit successful!");
-      await tx.wait();
-      // setStatus("success");
-    } catch (err) {
-      console.error(err);
-      setStatus("error");
-    }
-  };
+  const { handleClick } = useContext(TransactionContext);
 
   function openModal(asset) {
     // setChangeToken(asset);
@@ -61,8 +29,27 @@ export default function MyComponent() {
         title="Select a token"
       >
         <div className="modalContent">
-          <h2>BUSD</h2>
-          <h2>BNB</h2>
+          {tokenList.map((e, i) => {
+            return (
+              <div
+                key={i}
+                className="tokenChoice"
+                // onClick={() => modifyToken(i)}
+              >
+                <Image
+                  src={e.img}
+                  alt={e.ticker}
+                  width={30}
+                  height={30}
+                  className="tokenLogo"
+                />
+                <div className="tokenChoiceNames">
+                  <div className="tokenName">{e.name}</div>
+                  <div className="tokenTicker">{e.ticker}</div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Modal>
       <div className="mainContainer">
