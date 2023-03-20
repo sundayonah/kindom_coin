@@ -8,7 +8,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   color: #e7e8e8;
-  /* background: var(--background); */
+  background: var(--background);
 }
 
 :root {
@@ -20,7 +20,6 @@ body {
 
 .mainContainer {
   width: 80%;
-  /* height: 100vh; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin: auto;
@@ -32,12 +31,12 @@ body {
   border-radius: var(--radius);
   border: var(--border);
   margin: auto;
+  margin-bottom: 2rem;
+  -webkit-box-shadow: -1px 1px 22px 6px rgba(78, 76, 76, 0.72);
+  -moz-box-shadow: -1px 1px 22px 6px rgba(90, 90, 90, 0.72);
+  box-shadow: -1px 1px 22px 6px rgba(34, 34, 34, 0.72);
 }
 /* LEFT WING */
-
-.leftWing p {
-  padding-bottom: 0.1rem;
-}
 .youPay {
   display: flex;
   justify-content: space-between;
@@ -146,8 +145,6 @@ body {
 /* RIGHT WING */
 .rightWing {
   padding: 0.7rem;
-  /* border-radius: var(--radius);
-  border: var(--border); */
 }
 .totalClaim {
   padding: 0.5rem;
