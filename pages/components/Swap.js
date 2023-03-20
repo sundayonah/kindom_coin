@@ -1,17 +1,42 @@
 import { ethers } from "ethers";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { RiArrowDownSFill } from "react-icons/ri";
 import Image from "next/image";
 import Logo from "../components/images/logo.png";
-import { Button, Modal, Popover } from "antd";
+import Bnb from "./images/bnb.png";
+import Busd from "./images/busd.png";
+import { Modal, message } from "antd";
 import { TransactionContext } from "./ReactContext";
-import tokenList from "./tokenList.json";
+import ClipLoader from "react-spinners/ClipLoader";
+// import tokenList from "./tokenList.json";
 
 export default function MyComponent() {
+  const { handleClick, spinLoading, contextHolder } =
+    useContext(TransactionContext);
+
+  const tokens = [
+    {
+      ticker: "BNB",
+      img: "/public/bnb.png",
+      name: "bnb Coin",
+      address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      decimals: 6,
+    },
+
+    {
+      ticker: "BUSD",
+      img: { Busd },
+      name: "busd",
+      address: "0x514910771af9ca656af840dff83e8264ecf986ca",
+      decimals: 18,
+    },
+  ];
+
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState(false);
-
-  const { handleClick } = useContext(TransactionContext);
+  const [tokenOne, setTokenOne] = useState(tokens[0]);
+  const [changeToken, setChangeToken] = useState(1);
+  const [color, setColor] = useState("#ffffff");
 
   function openModal(asset) {
     // setChangeToken(asset);
@@ -20,8 +45,46 @@ export default function MyComponent() {
 
   const value = ethers.utils.parseUnits("0", "ether");
 
+  function modifyToken(i) {
+    // setPrices(null);
+    // setTokenOneAmount(null);
+    // setTokenTwoAmount(null);
+    if (changeToken === 1) {
+      setTokenOne(tokens[i]);
+      // fetchPrices(tokens[i].address, tokenTwo.address);
+    } else {
+      // setTokenTwo(tokens[i]);
+      // fetchPrices(tokenOne.address, tokens[i].address);
+    }
+    setIsOpen(false);
+  }
+
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "#ffff",
+  };
+
+  // const [messageApi, contextHolder] = message.useMessage();
+
+  // const success = () => {
+  //   messageApi.open({
+  //     type: "success",
+  //     content: "This is a success message",
+  //   });
+  // };
+
+  // const error = () => {
+  //   messageApi.open({
+  //     type: "error",
+  //     content: "This is an error message",
+  //   });
+  // };
+
   return (
     <>
+      {contextHolder}
+
       <Modal
         open={isOpen}
         footer={null}
@@ -29,18 +92,18 @@ export default function MyComponent() {
         title="Select a token"
       >
         <div className="modalContent">
-          {tokenList.map((e, i) => {
+          {tokens.map((e, i) => {
             return (
               <div
                 key={i}
                 className="tokenChoice"
-                // onClick={() => modifyToken(i)}
+                onClick={() => modifyToken(i)}
               >
                 <Image
-                  src={e.img}
+                  src={Bnb}
                   alt={e.ticker}
-                  width={30}
-                  height={30}
+                  width={20}
+                  height={20}
                   className="tokenLogo"
                 />
                 <div className="tokenChoiceNames">
@@ -54,6 +117,8 @@ export default function MyComponent() {
       </Modal>
       <div className="mainContainer">
         <div className="leftWing">
+          {/* <Image src={Bnb} width={15} hieght={15} alt="bnb" />
+          <Image src={Busd} width={15} hieght={15} alt="bnb" /> */}
           <h4>Buy King</h4>
           <p>1 BNB = 1KD</p>
           <p>Min = 1</p>
@@ -69,9 +134,15 @@ export default function MyComponent() {
             <div className="input">
               <input placeholder="0.0" />
               <button>MAX</button>
-              <button onClick={() => openModal()}>
-                BUSD
-                <RiArrowDownSFill />
+              <button className="assetOne" onClick={() => openModal(1)}>
+                <Image
+                  className="assetLogo"
+                  src={Bnb}
+                  width={20}
+                  height={20}
+                  alt="Logo"
+                />
+                {tokenOne.ticker}
               </button>
             </div>
             <div className="youPay exchange">
@@ -96,10 +167,21 @@ export default function MyComponent() {
             <p>Total Claim = 1KD</p>
             <p>Next Claim: 12/12/12</p>
             <p>Next Claim Time: 12/12/12</p>
-
             <div className="claimButton">
               <button className="claim" onClick={() => handleClick()}>
-                CLAIM
+                {spinLoading ? (
+                  <div className="spinnerbtn">
+                    <ClipLoader
+                      color={color}
+                      cssOverride={override}
+                      loading={spinLoading}
+                      size={20}
+                    />
+                    {/* <p>Approve...</p> */}
+                  </div>
+                ) : (
+                  "CLAIM"
+                )}
               </button>
             </div>
           </div>
