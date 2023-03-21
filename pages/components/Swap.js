@@ -18,7 +18,7 @@ export default function MyComponent() {
     {
       ticker: "BNB",
       img: "/public/bnb.png",
-      name: "bnb Coin",
+      name: "bnb",
       address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       decimals: 6,
     },
@@ -120,7 +120,7 @@ export default function MyComponent() {
           {/* <Image src={Bnb} width={15} hieght={15} alt="bnb" />
           <Image src={Busd} width={15} hieght={15} alt="bnb" /> */}
           <h4>Buy King</h4>
-          <p>1 BNB = 1KD</p>
+          <p>1 BNB = 1KD </p>
           <p>Min = 1</p>
           <p>Max = 1</p>
           <p>Total Deposit = 1</p>

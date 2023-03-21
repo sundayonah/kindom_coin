@@ -17,6 +17,10 @@ body {
   --background: #0d1117;
   --button: #daa851;
 }
+span {
+  /* padding-left: 3rem; */
+  /* color: var(--button); */
+}
 
 .mainContainer {
   width: 80%;
@@ -26,7 +30,7 @@ body {
   gap: 2rem;
 }
 .leftWing {
-  padding: 0.7rem;
+  padding: 1rem;
   background-color: var(--background);
   border-radius: var(--radius);
   border: var(--border);
@@ -55,13 +59,17 @@ body {
   padding: 4px;
 }
 
+hr {
+  border: var(--border);
+}
+
 .input input {
   padding: 8px;
   padding-right: 5rem;
   background-color: transparent;
   border: none;
   outline: none;
-  color: azure;
+  color: rgb(34, 198, 198);
 }
 
 .input button {
@@ -147,10 +155,13 @@ body {
   padding: 0.7rem;
 }
 .totalClaim {
-  padding: 0.5rem;
+  padding: 1rem;
   background-color: var(--background);
   border-radius: var(--radius);
   border: var(--border);
+  -webkit-box-shadow: -1px 1px 22px 6px rgba(78, 76, 76, 0.72);
+  -moz-box-shadow: -1px 1px 22px 6px rgba(90, 90, 90, 0.72);
+  box-shadow: -1px 1px 22px 6px rgba(34, 34, 34, 0.72);
 }
 
 /* .totalClaimText h1 {
@@ -209,34 +220,6 @@ li {
   margin: 0 2rem;
 } */
 
-@media (max-width: 980px) {
-  .mainContainer {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    margin: 0 2rem;
-  }
-}
-
-@media (max-width: 560px) {
-  .leftWing,
-  .totalClaim {
-    margin-right: 2rem;
-    margin-left: 0.1rem;
-  }
-}
-
-/* 
-
-
-@media (max-width: 550px) {
-  .mainContainer {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-
-  }
-} */
-
-/* .......................... */
 .ant-input {
   background-color: #1f2639 !important;
   color: white !important;
@@ -304,7 +287,7 @@ li {
   border: 1px solid #363e54;
   width: 200px !important;
   border-radius: 10px;
-  margin: 12rem 27rem;
+  margin: 12rem 23rem;
 }
 
 .ant-modal-header {
@@ -365,6 +348,48 @@ li {
   font-weight: 300;
   color: #51596f;
 }
+.assetLogo {
+  height: 22px;
+  margin-left: 5px;
+}
+
+@media (max-width: 980px) {
+  .mainContainer {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    margin: 0 2rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .ant-modal {
+    border: 1px solid #363e54;
+    width: 200px !important;
+    border-radius: 10px;
+    margin: 12rem 16rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .leftWing,
+  .totalClaim {
+    margin-right: 2rem;
+    margin-left: 0.1rem;
+  }
+}
+
+/* 
+
+
+@media (max-width: 550px) {
+  .mainContainer {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+
+  }
+} */
+
+/* .......................... */
 
 /* .assetOne {
   position: absolute;
@@ -382,7 +407,3 @@ li {
   font-size: 17px;
   padding-right: 8px;
 } */
-.assetLogo {
-  height: 22px;
-  margin-left: 5px;
-}
