@@ -14,9 +14,9 @@ export const TransactionProvider = ({ children }) => {
   console.log(address, "user address ...,.,.,..,..,.,user");
 
   //message
-
   const [messageApi, contextHolder] = message.useMessage();
 
+  //success f(x)
   const success = () => {
     messageApi.open({
       type: "success",
@@ -24,6 +24,7 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
+  //error f(x)
   const error = () => {
     messageApi.open({
       type: "error",

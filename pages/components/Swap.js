@@ -8,7 +8,6 @@ import Busd from "./images/busd.png";
 import { Modal, message } from "antd";
 import { TransactionContext } from "./ReactContext";
 import ClipLoader from "react-spinners/ClipLoader";
-// import tokenList from "./tokenList.json";
 
 export default function MyComponent() {
   const { handleClick, spinLoading, contextHolder } =
@@ -64,22 +63,6 @@ export default function MyComponent() {
     margin: "0 auto",
     borderColor: "#ffff",
   };
-
-  // const [messageApi, contextHolder] = message.useMessage();
-
-  // const success = () => {
-  //   messageApi.open({
-  //     type: "success",
-  //     content: "This is a success message",
-  //   });
-  // };
-
-  // const error = () => {
-  //   messageApi.open({
-  //     type: "error",
-  //     content: "This is an error message",
-  //   });
-  // };
 
   return (
     <>
