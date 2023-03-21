@@ -8,8 +8,17 @@ export const TransactionContext = createContext({});
 export const TransactionProvider = ({ children }) => {
   const [spinLoading, setSpinLoading] = useState(false);
   const [status, setStatus] = useState(false);
+  const [v1, setV1] = useState("");
+  const [v2, setV2] = useState("");
+  const [kcPrice, setKcPrice] = useState("");
+  const [minLock, setMinLock] = useState("");
+  const [maxLock, setMaxLock] = useState("");
+  const [lockFund, setLockFund] = useState("");
+  const [totalClaim, setTotalClaim] = useState("");
+  const [nextClaimAmount, setNextClaimAmonut] = useState("");
+  const [nectClaimTime, setNextClaimTime] = useState("");
 
-  const contractAddress = "0x7872D3C3Ebc9152daEeC572311E9A51724ff70A5";
+  const contractAddress = "0x0Fd0ECF9ca6b82591850353e2E94F37EbDd21947";
   const address = useAddress();
   console.log(address, "user address ...,.,.,..,..,.,user");
 
@@ -32,17 +41,139 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
+  const handleMaxChange = async (e) => {
+    setV1(e);
+    setV2(e);
+  };
+  const handleV1Change = async (e) => {
+    setV1(e.target.value);
+    setV2(e.target.value);
+  };
+
+  //BNB TO KC
+  useEffect(() => {
+    const Price = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        const max = await profile.price();
+        const maxPrice = ethers.utils.formatUnits(max, "ether");
+        const formattedPrice = maxPrice.toLocaleString();
+        setKcPrice(formattedPrice);
+        // console.log(formattedPrice, "price price");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    Price();
+  }, []);
+
+  //MINLOCKFOREACHUSER
+  useEffect(() => {
+    const MinLockForEachUser = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        const max = await profile.minLockForEachUser();
+        const minlock = ethers.utils.formatUnits(max, "ether");
+        const formattedMinLock = minlock.toLocaleString();
+        setMinLock(formattedMinLock);
+        // console.log(formattedMinLock, "formattedMinLock formattedMinLock");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    MinLockForEachUser();
+  }, []);
+
+  //MAXLOCKFOREACHUSER
+  useEffect(() => {
+    const MaxLockForEachUser = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        const max = await profile.maxLockForEachUser();
+        const maxlock = ethers.utils.formatUnits(max, "ether");
+        const formattedMaxLock = maxlock.toLocaleString();
+        setMaxLock(formattedMaxLock);
+        // console.log(formattedMaxLock, "formattedMaxLock formattedMaxLock");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    MaxLockForEachUser();
+  }, []);
+
+  //LOCKEDFUNDS
+  useEffect(() => {
+    const LockedFunds = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        const max = await profile.lockedFunds();
+        const fundLock = ethers.utils.formatUnits(max, "ether");
+        const formattedLock = fundLock.toLocaleString();
+        setLockFund(formattedLock);
+        // console.log(formattedLock, "formattedLock formattedLock");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    LockedFunds();
+  }, []);
+
+  //USERSTORAGE
+  useEffect(() => {
+    const UserStorage = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        const max = await profile.userStorage(address);
+
+        //TOTAL CLAIM
+        const max0 = max[0];
+        const TotalClaim = ethers.utils.formatUnits(max0, "ether");
+        const formattedTotalClaim = TotalClaim.toLocaleString();
+        setTotalClaim(formattedTotalClaim);
+
+        //NEXT CLAIM
+        const max1 = max[3];
+        const NextClaim = ethers.utils.formatUnits(max1, "ether");
+        const formattedNextClaim = NextClaim.toLocaleString();
+        setNextClaimAmonut(formattedNextClaim);
+
+        //NEXT CLAIM TIME
+        const max2 = max[4];
+        const NextClaimTime = max2;
+        // console.log(max, max2, "formattedNextClaim");
+
+        const nexClaimTime = new Date(NextClaimTime * 1000);
+        const formattedNextClaimTime = nexClaimTime.toLocaleString();
+        setNextClaimTime(formattedNextClaimTime);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    UserStorage();
+  }, [address]);
+
   //CLAIM F(X)
-  const handleClick = async () => {
+  const handleClaim = async () => {
     setSpinLoading(true);
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(contractAddress, routerAbi, signer);
-      const amount = ethers.utils.parseUnits("0.1", "gwei");
-      console.log(amount, "yuyuyuyuyu");
+      // const amount = ethers.utils.parseUnits("0.1", "gwei");
 
-      const tx = await contract.deposit(address, amount, {
+      const tx = await contract.claimKingdomCoin({
         gasLimit: 500000,
         gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
       });
@@ -69,8 +200,19 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        nectClaimTime,
+        nextClaimAmount,
+        totalClaim,
+        lockFund,
+        maxLock,
+        minLock,
+        kcPrice,
+        v1,
+        v2,
+        handleV1Change,
+        handleMaxChange,
         contextHolder,
-        handleClick,
+        handleClaim,
         spinLoading,
       }}
     >

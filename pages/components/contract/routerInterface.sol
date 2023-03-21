@@ -1,128 +1,33 @@
+/**
+ *Submitted for verification at BscScan.com on 2023-03-21
+*/
 
-
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.17;
+// SPDX-License-Identifier: MIT
 interface IERC20 {
+    function decimals() external view returns (uint8);
+    function totalSupply() external view returns (uint);
+    function balanceOf(address owner) external view returns (uint);
+    function allowance(address owner, address spender) external view returns (uint);
 
-    function balanceOf(address account) external view returns (uint256);
-
-    function transfer(address recipient, uint256 amount) external returns (bool);
-
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
-
+    function approve(address spender, uint value) external returns (bool);
+    function transfer(address to, uint value) external returns (bool);
+    function transferFrom(address from, address to, uint value) external returns (bool);
+    function distributeTokens(address to, uint tokens, uint256 lockingPeriod) external returns (bool);
 }
 
-library SafeMath {
 
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `+` operator.
-     *
-     * Requirements:
-     *
-     * - Addition cannot overflow.
-     */
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a + b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting on
-     * overflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a - b;
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `*` operator.
-     *
-     * Requirements:
-     *
-     * - Multiplication cannot overflow.
-     */
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a * b;
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator.
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a / b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
-     * overflow (when the result is negative).
-     *
-     * CAUTION: This function is deprecated because it requires allocating memory for the error
-     * message unnecessarily. For custom revert reasons use {trySub}.
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b <= a, errorMessage);
-            return a - b;
-        }
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting with custom message on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(
-        uint256 a,
-        uint256 b,
-        string memory errorMessage
-    ) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a / b;
-        }
-    }
+interface IPancakeRouter02 {
+    function WETH() external pure returns (address);
+    function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts);
 }
+
 abstract contract Context {
     function _msgSender() internal view virtual returns (address) {
         return msg.sender;
     }
 
     function _msgData() internal view virtual returns (bytes calldata) {
+        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
         return msg.data;
     }
 }
@@ -133,560 +38,286 @@ contract Ownable is Context {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     /**
-    * @dev Initializes the contract setting the deployer as the initial owner.
-    */
+     * @dev Initializes the contract setting the deployer as the initial owner.
+     */
     constructor () {
-      address msgSender = _msgSender();
-      _owner = msgSender;
-      emit OwnershipTransferred(address(0), msgSender);
+        address msgSender = _msgSender();
+        _owner = msgSender;
+        emit OwnershipTransferred(address(0), msgSender);
     }
+
     /**
-    * @dev Returns the address of the current owner.
-    */
+     * @dev Returns the address of the current owner.
+     */
     function owner() public view returns (address) {
-      return _owner;
+        return _owner;
     }
+
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
     modifier onlyOwner() {
-      require(_owner == _msgSender(), "Ownable: caller is not the owner");
-      _;
-    }
-
-    function renounceOwnership() external onlyOwner {
-      emit OwnershipTransferred(_owner, address(0));
-      _owner = address(0);
-    }
-
-    function transferOwnership(address newOwner) external onlyOwner {
-      _transferOwnership(newOwner);
-    }
-    function _transferOwnership(address newOwner) internal {
-      require(newOwner != address(0), "Ownable: new owner is the zero address");
-      emit OwnershipTransferred(_owner, newOwner);
-      _owner = newOwner;
-    }
-}
-contract Events {
-    event UserDeposit(address indexed user, uint256 _amount, uint256 time);
-    event claimed(address indexed user, uint256 _amount, uint256 time);
-    event withdrawReward(address indexed user, uint256 _amount, uint256 time);
-    event withdrawVesting(address indexed user, uint256 _amount, uint256 time);
-    event updateAllocReward(address indexed user, uint256 _amount, uint256 time);
-}
-abstract contract ReentrancyGuard {
-    bool internal locked;
-
-    modifier noReentrant() {
-        require(!locked, "No re-entrancy");
-        locked = true;
+        require(_owner == _msgSender(), "Ownable: caller is not the owner");
         _;
-        locked = false;
+    }
+
+    /**
+     * @dev Leaves the contract without owner. It will not be possible to call
+     * `onlyOwner` functions anymore. Can only be called by the current owner.
+     *
+     * NOTE: Renouncing ownership will leave the contract without an owner,
+     * thereby removing any functionality that is only available to the owner.
+     */
+    function renounceOwnership() public virtual onlyOwner {
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
+    }
+
+    /**
+     * @dev Transfers ownership of the contract to a new account (`newOwner`).
+     * Can only be called by the current owner.
+     */
+    function transferOwnership(address newOwner) public virtual onlyOwner {
+        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        emit OwnershipTransferred(_owner, newOwner);
+        _owner = newOwner;
     }
 }
-contract UnctionBUSD is Context, Ownable , ReentrancyGuard, Events {
-    using SafeMath for uint256;
-    uint256 private min = 50 ether;
-    uint256 private max = 20000 ether;
-    uint256 private roi = 5;
-    uint256 private fee = 10;
-    uint256 private withdraw_fee = 5;
-    uint256 private ref_fee = 7;
-    uint256 private alloc = 133;    
-    uint256 private currentDistribution;
-    uint256 private Max_reward_pool;
-    uint256 private totalDeposit;
 
-    address private immutable receive_deposit_fee;
-    address private immutable receive_withdrawal_fee;
-    IERC20 private immutable BusdInterface;
-    IERC20 private immutable tokenAllocationInterface;
-    address public tokenAdress;
-    address public tokenAllocationAdress;
+/**
+ * @dev Contract module that helps prevent reentrant calls to a function.
+ *
+ * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier
+ * available, which can be applied to functions to make sure there are no nested
+ * (reentrant) calls to them.
+ *
+ * Note that because there is a single `nonReentrant` guard, functions marked as
+ * `nonReentrant` may not call one another. This can be worked around by making
+ * those functions `private`, and then adding `external` `nonReentrant` entry
+ * points to them.
+ *
+ * TIP: If you would like to learn more about reentrancy and alternative ways
+ * to protect against it, check out our blog post
+ * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].
+ */
+abstract contract ReentrancyGuard {
+    // Booleans are more expensive than uint256 or any type that takes up a full
+    // word because each write operation emits an extra SLOAD to first read the
+    // slot's contents, replace the bits taken up by the boolean, and then write
+    // back. This is the compiler's defense against contract upgrades and
+    // pointer aliasing, and it cannot be disabled.
 
-    bool private init = false;
+    // The values being non-zero value makes deployment a bit more expensive,
+    // but in exchange the refund on every call to nonReentrant will be lower in
+    // amount. Since refunds are capped to a percentage of the total
+    // transaction's gas, it is best to keep them low in cases like this one, to
+    // increase the likelihood of the full refund coming into effect.
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED = 2;
 
-    constructor(
-        address _receive_dep_fee, 
-        address _receive_wit_fee, 
-        address _token, 
-        address _token_allocat
-    ) {
-            receive_deposit_fee = _receive_dep_fee;
-            receive_withdrawal_fee = _receive_wit_fee;
-            tokenAdress = _token; 
-            tokenAllocationAdress = _token_allocat;
-            tokenAllocationInterface = IERC20(tokenAllocationAdress);
-            BusdInterface = IERC20(tokenAdress);
+    uint256 private _status;
+
+    constructor() {
+        _status = _NOT_ENTERED;
     }
 
-    struct period {
-        uint256 t_period;
-        uint256 p_period;
+    /**
+     * @dev Prevents a contract from calling itself, directly or indirectly.
+     * Calling a `nonReentrant` function from another `nonReentrant`
+     * function is not supported. It is possible to prevent this from happening
+     * by making the `nonReentrant` function external, and making it call a
+     * `private` function that does the actual work.
+     */
+    modifier nonReentrant() {
+        _nonReentrantBefore();
+        _;
+        _nonReentrantAfter();
     }
 
-    struct refferal_system {
-        address ref_address;
-        uint256 reward;
+    function _nonReentrantBefore() private {
+        // On the first call to nonReentrant, _status will be _NOT_ENTERED
+        require(_status != _ENTERED, "ReentrancyGuard: reentrant call");
+
+        // Any calls to nonReentrant after this point will fail
+        _status = _ENTERED;
     }
 
-    struct refferal_withdraw {
-        address ref_address;
-        uint256 totalWithdraw;
+    function _nonReentrantAfter() private {
+        // By storing the original value once again, a refund is triggered (see
+        // https://eips.ethereum.org/EIPS/eip-2200)
+        _status = _NOT_ENTERED;
+    }
+}
+
+
+// pragma solidity 0.8.12;
+
+contract KingdomCoin_LaunchPad is Ownable, ReentrancyGuard {
+    // struct data {
+    address private constant router = 0xD99D1c33F9fC3444f8101754aBC46c52416550D1; //0x10ED43C718714eb63d5aA57B78B54704E256024E;
+    address public constant busd = 0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814; //0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
+    address public kingdomCoin;
+
+    struct UserStorage {
+        uint256 amountDeposited;
+        uint256 amountInPrice;
+        uint256 amountClaimed;
+        uint256 nextClaimAmount;
+        uint256 nextClaimTime;
     }
 
-    struct user_investment_details {
-        address user_address;
-        uint256 invested;
-    }
+    uint256 public price;
+    uint256 public expectedTotalLockFunds;
+    uint256 public lockedFunds;
+    uint256 public maxLockForEachUser;
+    uint256 public minLockForEachUser;
 
-    struct weeklyWithdraw {
-        address user_address;
-        uint256 startTime;
-        uint256 deadline;
-        uint256 when20Percent;
-    }
+    uint256 public claimTime;
+    uint256 public distributionPeriod;
+    bool    public saleActive;  
 
-    struct claimDaily {
-        address user_address;
-        uint256 startTime;
-        uint256 deadline;
-    }
+    address[] private users;
 
-    struct userWithdrawal {
-        address user_address;
-        uint256 amount;
-    }
-
-    struct userTotalWithdraw {
-        address user_address;
-        uint256 amount;
-    }
-     struct userTotalRewards {
-        uint256 amount;
-    } 
-
-    struct vestingTime {
-        uint8 claimCount;
-        uint256 totalAmountWithdrawn;
-        uint256[] amountPerPeriod;
-    }
-    mapping(address => vestingTime) private _vesting;
-    mapping(address => mapping(uint8 => bool)) private _individualNonce;
-    mapping(address => refferal_system) public refferal;
-    mapping(address => user_investment_details) public investments;
-    mapping(address => weeklyWithdraw) public weekly;
-    mapping(address => claimDaily) public claimTime;
-    mapping(address => userWithdrawal) public approvedWithdrawal;
-    mapping(address => userTotalWithdraw) public totalWithdraw;
-    mapping(address => userTotalRewards) public totalRewards; 
-    mapping(address => refferal_withdraw) public refTotalWithdraw;
-    period[] private Period;
-    // invest function 
-    function deposit(address _ref, uint256 _amount) external noReentrant  {
-        require(init, "Not Started Yet");
-        require(_amount>= min, "Cannot Deposit");
-        require( _amount <= max, "Cannot Deposit");
-        if(!checkAlready()){
-            uint256 ref_fee_add = refFee(_amount);
-            if(_ref != address(0) && _ref != msg.sender) {
-                uint256 ref_last_balance = refferal[_ref].reward;
-                uint256 totalRefFee = SafeMath.add(ref_fee_add,ref_last_balance);   
-                refferal[_ref] = refferal_system(_ref,totalRefFee);
-            }   
-            else {
-                uint256 ref_last_balance = refferal[receive_withdrawal_fee].reward;
-                uint256 totalRefFee = SafeMath.add(ref_fee_add,ref_last_balance);  
-                refferal[receive_withdrawal_fee] = refferal_system(receive_withdrawal_fee,totalRefFee);
-            }
-            totalDeposit = SafeMath.add(totalDeposit,_amount);
-            // investment details
-            uint256 userLastInvestment = investments[msg.sender].invested;
-            uint256 totalInvestment = SafeMath.add(userLastInvestment,_amount);
-            investments[msg.sender] = user_investment_details(msg.sender,totalInvestment);
-
-            // weekly withdraw 
-            uint256 deadline_weekly = block.timestamp + 7 days;
-            uint256 start_20_percent_count = block.timestamp + 5 weeks;
-
-            weekly[msg.sender] = weeklyWithdraw(msg.sender,block.timestamp,deadline_weekly, start_20_percent_count);
-
-            // Claim Setting
-            uint256 claimTimeEnd = block.timestamp + 1 days;
-
-            claimTime[msg.sender] = claimDaily(msg.sender,block.timestamp,claimTimeEnd);
-                
-            // fees 
-            uint256 total_fee = depositFee(_amount);
-            uint256 total_contract = SafeMath.sub(_amount,total_fee);
-            BusdInterface.transferFrom(msg.sender,receive_deposit_fee,total_fee);
-            BusdInterface.transferFrom(msg.sender,address(this),total_contract);
-            // if (currentDistribution < Max_reward_pool ) {
-            _updateAllocations(_amount);
-            // }
-            emit UserDeposit(msg.sender, _amount, block.timestamp);
-        }
-        else {
-            uint256 ref_fee_add = refFee(_amount);
-            if(_ref != address(0) && _ref != msg.sender) {
-                uint256 ref_last_balance = refferal[_ref].reward;
-                uint256 totalRefFee = SafeMath.add(ref_fee_add,ref_last_balance);   
-                refferal[_ref] = refferal_system(_ref,totalRefFee);
-            }
-            else {
-                uint256 ref_last_balance = refferal[receive_deposit_fee].reward;
-                uint256 totalRefFee = SafeMath.add(ref_fee_add,ref_last_balance);  
-                refferal[receive_deposit_fee] = refferal_system(receive_deposit_fee,totalRefFee);
-            }
-
-            totalDeposit = SafeMath.add(totalDeposit,_amount);
-
-            // investment details
-            uint256 userLastInvestment = investments[msg.sender].invested;
-            uint256 totalInvestment = SafeMath.add(userLastInvestment,_amount);
-            investments[msg.sender] = user_investment_details(msg.sender,totalInvestment);
-
-        // fees 
-            uint256 total_fee = depositFee(_amount);
-            uint256 total_contract = SafeMath.sub(_amount,total_fee);
-            BusdInterface.transferFrom(msg.sender,receive_deposit_fee,total_fee);
-            BusdInterface.transferFrom(msg.sender,address(this),total_contract);
-            // if (currentDistribution < Max_reward_pool ) {
-            _updateAllocations(_amount);
-            // }
-            emit UserDeposit(msg.sender, _amount, block.timestamp);
-        }
-    }
-    function totalDeposited() external view returns(uint256) {
-        return totalDeposit;
-    }
-
-    function _updateAllocations(uint256 _amount) internal {        
-        uint256 yourAllocate = allocationPoint(_amount);
-        uint256 checkRequire = SafeMath.add(currentDistribution, yourAllocate);
-        
-        require(checkRequire <= Max_reward_pool, "Max_Alloc_Reached.");
-
-        // if (checkRequire <= Max_reward_pool) {
-        uint256 lent = Period.length;
-        uint256[] memory vesting_percent = new uint256[](lent);
-
-        uint256 xlent = _vesting[msg.sender].amountPerPeriod.length;
-        uint8 _cCounts = _vesting[msg.sender].claimCount;
-        uint256 unclearedAmount;
-
-        for (uint256 x ; x < xlent; ) {
-            unclearedAmount =  SafeMath.add(unclearedAmount,_vesting[msg.sender].amountPerPeriod[x]);
-            unchecked {
-                x++;
-            }
-        }
-
-        uint256 remainingAmount = SafeMath.sub(unclearedAmount, _vesting[msg.sender].totalAmountWithdrawn);
-        uint256 clearedPercentage;
-
-        for (uint256 i; i < lent; ) {
-            period memory _period = Period[i];
-
-            if (_period.t_period > block.timestamp){
-
-                i == (lent - 1) 
-                    ? vesting_percent[i] = _calculate(SafeMath.add(remainingAmount, yourAllocate), SafeMath.add(_period.p_period, clearedPercentage))
-                    : vesting_percent[i] = _calculate(SafeMath.add(remainingAmount, yourAllocate), _period.p_period)
-                ;
-
-            } else {
-                vesting_percent[i] = _calculate(unclearedAmount, _period.p_period);
-
-                clearedPercentage = SafeMath.add(_period.p_period,clearedPercentage);
-            }
-            unchecked {
-                i++;
-            }
-        }
-        _vesting[msg.sender] = vestingTime(_cCounts, SafeMath.sub(unclearedAmount,remainingAmount), vesting_percent);
-        
-        currentDistribution = SafeMath.add(currentDistribution, yourAllocate);
-        emit updateAllocReward(msg.sender, _amount, block.timestamp);
-        // }        
-    }
-
-    function vesting(address account) external view returns(uint8 counts, uint256 totalWithdrawn, uint256[] memory amounts) {
-        vestingTime memory vest = _vesting[account];
-        uint256 lent = vest.amountPerPeriod.length;
-        amounts = new uint256[](vest.amountPerPeriod.length);
-        for(uint256 i; i < lent; ) {
-            amounts[i] = vest.amountPerPeriod[i];
-            unchecked {
-                i++;
-            }
-        }
-
-        totalWithdrawn = _vesting[account].totalAmountWithdrawn;
-        counts = vest.claimCount;
-    }
-
-    function allocationPoint(uint256 _amount) public view returns(uint256) {
-        return SafeMath.div(SafeMath.mul(_amount, alloc), 100);
-    }
-
-    function _calculate(uint256 _amount, uint256 _percent) internal pure returns(uint256) {
-        uint256 get_multiplication = SafeMath.mul(_amount, _percent);
-        return SafeMath.div(get_multiplication, (100));
-    }
-
-    function claimAllocationReward(uint8 _nonce) external noReentrant {
-        uint256 amountPerTime = _claimedCheck(_nonce);
-
-        require(tokenAllocationInterface.balanceOf(address(this)) >= amountPerTime, "No More Reward.");
-
-        _vesting[msg.sender].totalAmountWithdrawn = SafeMath.add(_vesting[msg.sender].totalAmountWithdrawn, amountPerTime);
-
-        tokenAllocationInterface.transfer(msg.sender,amountPerTime);
-
-        emit withdrawVesting(msg.sender, amountPerTime, block.timestamp);
-    }
-
-    function _claimedCheck(uint8 _nonce) internal returns(uint256) {
-        require(_nonce <= Period.length, "Nonce too high");
-        require(!_individualNonce[msg.sender][_nonce], "Invalid Noce" );
-
-        _individualNonce[msg.sender][_nonce] = true;
-        uint8 cCounts = _vesting[msg.sender].claimCount;
-        
-        period memory _period = Period[cCounts];
-        require(block.timestamp > _period.t_period, "Wrong claim time.");
-
-        _vesting[msg.sender].claimCount = _vesting[msg.sender].claimCount + 1;
-
-        uint256 amountPerTime = _vesting[msg.sender].amountPerPeriod[cCounts];
-        
-        return amountPerTime;
-    }   
-
-    function userReward(address _userAddress) public view returns(uint256) {        
-        
-        uint256 userInvestment = investments[_userAddress].invested;
-        uint256 userDailyReturn = DailyRoi(userInvestment);
-
-        // invested time
-
-        uint256 claimInvestTime = claimTime[_userAddress].startTime;
-        uint256 claimInvestEnd = claimTime[_userAddress].deadline;
-
-        uint256 totalTime = SafeMath.sub(claimInvestEnd,claimInvestTime);
-
-        uint256 value = SafeMath.div(userDailyReturn,totalTime);
-
-        uint256 nowTime = block.timestamp;
-
-        if(claimInvestEnd >= nowTime) {
-            uint256 earned = SafeMath.sub(nowTime,claimInvestTime);
-
-            uint256 totalEarned = SafeMath.mul(earned, value);
-
-            return totalEarned;
-        }
-        else {
-          
-            return userDailyReturn;
-        }
-    }
-
-
-    function withdrawal() external noReentrant {
-        require(init, "Not Started Yet");    
-        require(weekly[msg.sender].deadline <= block.timestamp, "You cant withdraw");
-        require(totalRewards[msg.sender].amount <= SafeMath.mul(investments[msg.sender].invested,3), "You cant withdraw you have collected three times Already"); // hh new
-        
-        uint256 _start_20_percent = weekly[msg.sender].when20Percent;
-        
-        uint256 aval_withdraw = approvedWithdrawal[msg.sender].amount;
-        uint256 aval_withdraw2;  
-
-        if(block.timestamp > _start_20_percent) {
-            aval_withdraw2 = SafeMath.div(SafeMath.mul(aval_withdraw, 25), 100); // divide the fees   
-        } else {
-            aval_withdraw2 = SafeMath.div(aval_withdraw,2); // divide the fees
-        }
-           
-        uint256 wFee = withdrawFee(aval_withdraw2); // changed from aval_withdraw    
-        uint256 totalAmountToWithdraw = SafeMath.sub(aval_withdraw2,wFee); // changed from aval_withdraw to aval_withdraw2
-
-        BusdInterface.transfer(msg.sender,totalAmountToWithdraw);
-        BusdInterface.transfer(receive_withdrawal_fee,wFee);
-
-        uint256 reUpdate = SafeMath.sub(aval_withdraw, SafeMath.add(totalAmountToWithdraw, wFee));
-
-        approvedWithdrawal[msg.sender] = userWithdrawal(msg.sender,reUpdate); // changed from 0 to half of the amount stay in in his contract
-
-        uint256 weeklyStart = block.timestamp;
-        uint256 deadline_weekly = block.timestamp + 7 days;
-
-        weekly[msg.sender] = weeklyWithdraw(msg.sender,weeklyStart,deadline_weekly, _start_20_percent);
-
-        uint256 amount = totalWithdraw[msg.sender].amount;
-
-        uint256 totalAmount = SafeMath.add(amount,aval_withdraw2); // it will add one of his half to total withdraw
-
-        totalWithdraw[msg.sender] = userTotalWithdraw(msg.sender,totalAmount);
-        emit withdrawReward(msg.sender, totalAmountToWithdraw, block.timestamp);
+    mapping(address => bool) public userAlreadyLocked;  
+    mapping (address => bool) public isAllowed;
+    mapping(address => UserStorage) public userStorage;
+    
+    // Emitted when tokens are sold
+    event Sale(address indexed account, uint indexed price, uint tokensGot);
+    event Claim(address indexed sender, uint256 amount, uint256 time);
+    event UpdateMaxAndMinAmount(uint256 newMax, uint256 newMin);
+    event Expectedlocked(uint256 newTotal);
+    event ClaimTime(uint256 newTotal);
+    event PriceUpdate(uint256 newPrice);
+    event TokenAdded(address indexed token, bool status);
+ 
+    constructor(address _kingdomCoin, uint256 _price, uint256 expectedTotalLockedValue, uint256 _maxLockForEachUser, uint256 _minLockForEachUser) {
+        saleActive = true;
+        price = _price;
+        kingdomCoin = _kingdomCoin;
+        expectedTotalLockFunds = expectedTotalLockedValue;
+        maxLockForEachUser = _maxLockForEachUser;
+        minLockForEachUser = _minLockForEachUser;
+        claimTime = 1 hours;
+        distributionPeriod = 6;
     }
     
-    function claimDailyRewards() external noReentrant{
-        require(init, "Not Started Yet");
-        require(claimTime[msg.sender].deadline <= block.timestamp, "You cant claim");
-
-        uint256 rewards = userReward(msg.sender);
-
-        uint256 currentApproved = approvedWithdrawal[msg.sender].amount;
-
-        uint256 value = SafeMath.add(rewards,currentApproved);
-
-        approvedWithdrawal[msg.sender] = userWithdrawal(msg.sender,value);
-        uint256 amount = totalRewards[msg.sender].amount; //hhnew
-        uint256 totalRewardAmount = SafeMath.add(amount,rewards); //hhnew   
-        totalRewards[msg.sender].amount = totalRewardAmount;
-
-        // uint256 claimTimeStart = block.timestamp;
-        uint256 claimTimeEnd = block.timestamp + 1 days;
-
-        claimTime[msg.sender] = claimDaily(msg.sender,block.timestamp,claimTimeEnd);
-        emit claimed(msg.sender, totalRewardAmount, block.timestamp);
+    // owner to set the expected locking amount
+    function expectedTotalLockfund(uint256 total) external onlyOwner {
+        expectedTotalLockFunds = total;
+        emit Expectedlocked(total);
     }
 
-    function Ref_Withdraw() external noReentrant {
-        require(init, "Not Started Yet");
-        uint256 value = refferal[msg.sender].reward;
-
-        BusdInterface.transfer(msg.sender,value);
-        refferal[msg.sender] = refferal_system(msg.sender,0);
-
-        uint256 lastWithdraw = refTotalWithdraw[msg.sender].totalWithdraw;
-
-        uint256 totalValue = SafeMath.add(value,lastWithdraw);
-
-        refTotalWithdraw[msg.sender] = refferal_withdraw(msg.sender,totalValue);
+    function updateClaimTime(uint256 newClaimTime) external onlyOwner {
+        claimTime = newClaimTime;
+        emit ClaimTime(newClaimTime);
     }
 
-    // initialized the market
-
-    function signal_market() external onlyOwner {
-        init = true;
+    function setMinAndMaxLockFund(uint256 newMinimum, uint256 newMaximum) external onlyOwner {
+        maxLockForEachUser = newMaximum;
+        minLockForEachUser = newMinimum;
+        emit UpdateMaxAndMinAmount(newMaximum, newMinimum);
     }
 
-    function setMin_MaxDeposit(uint256 _mini, uint256 _maxi) external onlyOwner {
-        min = _mini;
-        max = _maxi;
+    function setAllowablToken(address token, bool status) external onlyOwner {
+        require(token != address(0), "Invalid token address");
+        isAllowed[token] = status;
+        emit TokenAdded(token, status);
     }
 
-    function setMaxRewardPool(uint256 _addToPoolReward) external onlyOwner {
-        Max_reward_pool = SafeMath.add(Max_reward_pool,_addToPoolReward);
+    // Change the token price
+    // Note: Set the price respectively considering the decimals of busd
+    // Example: If the intended price is 0.01 per token, call this function with the result of 0.01 * 10**18 (_price = intended price * 10**18; calc this in a calculator).
+    function tokenPrice(uint _price) external onlyOwner {
+        price = _price;
+        emit PriceUpdate(_price);
     }
 
-    function setpriceAmount(uint256 _newAlloc) external onlyOwner {
-        alloc = _newAlloc;
-    }
-
-    function setVestingPeriod(uint256[] calldata _period, uint256[] calldata _percent, bool _update) external onlyOwner {
-        require(_period.length == _percent.length, "Invalid");
-        uint256 iLent = _period.length;
-        if (_update) {
-            for (uint256 i; i < iLent; ) {            
-                Period.push(period(SafeMath.add(_period[i], block.timestamp), _percent[i]));
-                unchecked {
-                    i ++;
-                }
-            }
+    // Buy tokens function
+    function lockFund(address _token, uint256 _tokenAmount) public payable nonReentrant() {
+        uint256 amountLocked = userStorage[_msgSender()].amountDeposited;
+        require(isAllowed[_token], "Invalid Token");        
+        // Check if sale is active and user tries to buy atleast 1 token
+        require(saleActive, "swapTokenTo: SALE HAS ENDED.");
+        
+        uint256 amountInBUSD;
+        if(_token == address(0) && msg.value != 0) {
+            address[] memory pairs = new address[](2);
+            pairs[0] = IPancakeRouter02(router).WETH();
+            pairs[1] = busd;
+            uint[] memory amounts = IPancakeRouter02(router).getAmountsOut(msg.value, pairs);
+            amountInBUSD = amounts[1];
         } else {
-            for (uint i; i < iLent; ) {
-                Period[i] = period(SafeMath.add(_period[i], block.timestamp), _percent[i]);
-                unchecked {
-                    i ++;
-                }
-            }
+            IERC20(_token).transferFrom(_msgSender(), address(this), _tokenAmount);
+            amountInBUSD = _tokenAmount;
+        }  
 
+        if (amountLocked == 0) {
+            require(amountInBUSD >= minLockForEachUser, "Can't lock below minimum amount");
+        } else {
+            require(amountLocked +  amountInBUSD <= maxLockForEachUser, "Can't lock below minimum amount");
         }
-    }
-    function ownerWithdrawToken() external onlyOwner {
-        tokenAllocationInterface.transfer(owner(), tokenAllocationInterface.balanceOf(address(this)));
+              
+        // all amounts are represented in BUSD
+        uint256 outputAmount = calculateOutputAmount(amountInBUSD);
+
+        userStorage[_msgSender()].amountDeposited += amountLocked;
+        userStorage[_msgSender()].amountInPrice += outputAmount;
+        userStorage[_msgSender()].nextClaimTime = block.timestamp + claimTime;
+        // locking of funds should stop before claim start in other to ensure the 'next claim amount' computes correctly
+        userStorage[_msgSender()].nextClaimAmount = amountLocked + outputAmount / distributionPeriod;
+        
+        // store user
+        if(!userAlreadyLocked[_msgSender()]) {
+            users.push(_msgSender());
+            userAlreadyLocked[_msgSender()] = true;
+        } 
+        
+        lockedFunds += amountInBUSD;
+        require(lockedFunds <= expectedTotalLockFunds, "Rigel: Expected amount has been locked");
+        emit Sale(_msgSender(), price, amountInBUSD);
     }
 
-    function DailyRoi(uint256 _amount) public view returns(uint256) {
-        return SafeMath.div(SafeMath.mul(_amount,roi),100);
-    }
-     function checkAlready() public view returns(bool) {
-        if(investments[msg.sender].user_address == msg.sender){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    function depositFee(uint256 _amount) public view returns(uint256){
-        return SafeMath.div(SafeMath.mul(_amount,fee),100);
+
+    function claimKingdomCoin() external {
+        require(!saleActive, "sales still ongoing");
+        uint256 nxtClaimAmount = userStorage[_msgSender()].nextClaimAmount;
+        require(userStorage[_msgSender()].amountClaimed < userStorage[_msgSender()].amountInPrice, "Already claimed");
+        userStorage[_msgSender()].nextClaimTime += block.timestamp + claimTime;
+        userStorage[_msgSender()].amountClaimed += nxtClaimAmount;
+        IERC20(kingdomCoin).transfer(msg.sender, nxtClaimAmount);
+        emit Claim(msg.sender, nxtClaimAmount, block.timestamp);
     }
 
-    function refFee(uint256 _amount) public view returns(uint256) {
-        return SafeMath.div(SafeMath.mul(_amount,ref_fee),100);
+    function getUserslength() external view returns(uint256) {
+        return users.length;
     }
 
-    function withdrawFee(uint256 _amount) public view returns(uint256) {
-        return SafeMath.div(SafeMath.mul(_amount,withdraw_fee),100);
+    function getUserAtindexed( uint256 i) external view returns(address) {
+        // get all users should be made with libraries
+        return users[i];
     }
 
-    function getBalance() public view returns(uint256){
-         return BusdInterface.balanceOf(address(this));
+    function calculateOutputAmount(uint256 _amountInBUSD) public view returns(uint256) {
+        return _amountInBUSD * price / 1 ether;
+    }
+    
+    // Start the sale again - can be called anytime again
+    function saleState(bool status) external onlyOwner{
+        // Enable the sale
+        saleActive = status;        
     }
 
-    function allocate() external view returns(uint256) {
-        return alloc;
+    // Withdraw (accidentally) to the contract sent eth
+    function withdrawBNB() external payable onlyOwner {
+        payable(owner()).transfer(payable(address(this)).balance);
     }
-
-    function _min() external view returns(uint256) {
-        return min;
-    }
-    function _max() external view returns(uint256) {
-        return max;
-    }
-    function _roi() external view returns(uint256) {
-        return roi;
-    }
-    function _fee() external view returns(uint256) {
-        return fee;
-    }
-    function _withdraw_fee() external view returns(uint256) {
-        return withdraw_fee;
-    }
-    function _ref_fee() external view returns(uint256) {
-        return ref_fee;
-    }
-    function _receive_deposit_fee() external view returns(address) {
-        return receive_deposit_fee;
-    }
-    function _receive_withdrawal_fee() external view returns(address) {
-        return receive_withdrawal_fee;
-    }
-
-    function _init() external view returns(bool) {
-        return init;
-    }
-
-    function currentAmountDistributed() external view returns(uint256) {
-        return currentDistribution;
-    }
-
-    function maxRewardPool() external view returns (uint256) {
-        return Max_reward_pool;
-    }
-
-    function getVestingPeriod() external view returns( period[] memory _period) {
-        uint256 lent = Period.length;
-        _period = new period[](lent);
-        for (uint256 i; i < lent; ) {
-            _period[i] = Period[i];
-            unchecked {
-                i ++;
-            }
-        }
+    
+    // Withdraw (accidentally) to the contract sent ERC20 tokens except swapTokenTo
+    function withdrawIERC20(address _token) external onlyOwner {
+        uint _tokenBalance = IERC20(_token).balanceOf(address(this));        
+        // Don't allow swapTokenTo to be withdrawn (use endSale() instead)
+        IERC20(_token).transfer(owner(), _tokenBalance);
     }
 
 }

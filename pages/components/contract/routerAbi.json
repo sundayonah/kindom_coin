@@ -1,21 +1,77 @@
 [
   {
     "inputs": [
+      { "internalType": "address", "name": "_kingdomCoin", "type": "address" },
+      { "internalType": "uint256", "name": "_price", "type": "uint256" },
       {
-        "internalType": "address",
-        "name": "_receive_dep_fee",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "expectedTotalLockedValue",
+        "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "_receive_wit_fee",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_maxLockForEachUser",
+        "type": "uint256"
       },
-      { "internalType": "address", "name": "_token", "type": "address" },
-      { "internalType": "address", "name": "_token_allocat", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_minLockForEachUser",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
+      }
+    ],
+    "name": "Claim",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newTotal",
+        "type": "uint256"
+      }
+    ],
+    "name": "ClaimTime",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newTotal",
+        "type": "uint256"
+      }
+    ],
+    "name": "Expectedlocked",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -40,25 +96,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "time",
+        "name": "newPrice",
         "type": "uint256"
       }
     ],
-    "name": "UserDeposit",
+    "name": "PriceUpdate",
     "type": "event"
   },
   {
@@ -67,23 +111,23 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "account",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "price",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "time",
+        "name": "tokensGot",
         "type": "uint256"
       }
     ],
-    "name": "claimed",
+    "name": "Sale",
     "type": "event"
   },
   {
@@ -92,275 +136,146 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
+        "name": "token",
         "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "time",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
       }
     ],
-    "name": "updateAllocReward",
+    "name": "TokenAdded",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "newMax",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "time",
+        "name": "newMin",
         "type": "uint256"
       }
     ],
-    "name": "withdrawReward",
+    "name": "UpdateMaxAndMinAmount",
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "time",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdrawVesting",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
-    ],
-    "name": "DailyRoi",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "Ref_Withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_fee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_init",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_max",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_min",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_receive_deposit_fee",
+    "name": "busd",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "_receive_withdrawal_fee",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_ref_fee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_roi",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_withdraw_fee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "allocate",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+      { "internalType": "uint256", "name": "_amountInBUSD", "type": "uint256" }
     ],
-    "name": "allocationPoint",
+    "name": "calculateOutputAmount",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "approvedWithdrawal",
-    "outputs": [
-      { "internalType": "address", "name": "user_address", "type": "address" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "checkAlready",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint8", "name": "_nonce", "type": "uint8" }],
-    "name": "claimAllocationReward",
+    "name": "claimKingdomCoin",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "claimDailyRewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "claimTime",
-    "outputs": [
-      { "internalType": "address", "name": "user_address", "type": "address" },
-      { "internalType": "uint256", "name": "startTime", "type": "uint256" },
-      { "internalType": "uint256", "name": "deadline", "type": "uint256" }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "currentAmountDistributed",
+    "name": "distributionPeriod",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "expectedTotalLockFunds",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_ref", "type": "address" },
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+      { "internalType": "uint256", "name": "total", "type": "uint256" }
     ],
-    "name": "deposit",
+    "name": "expectedTotalLockfund",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
-    ],
-    "name": "depositFee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [{ "internalType": "uint256", "name": "i", "type": "uint256" }],
+    "name": "getUserAtindexed",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "getBalance",
+    "name": "getUserslength",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getVestingPeriod",
-    "outputs": [
-      {
-        "components": [
-          { "internalType": "uint256", "name": "t_period", "type": "uint256" },
-          { "internalType": "uint256", "name": "p_period", "type": "uint256" }
-        ],
-        "internalType": "struct UnctionBUSD.period[]",
-        "name": "_period",
-        "type": "tuple[]"
-      }
-    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "investments",
-    "outputs": [
-      { "internalType": "address", "name": "user_address", "type": "address" },
-      { "internalType": "uint256", "name": "invested", "type": "uint256" }
-    ],
+    "name": "isAllowed",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "maxRewardPool",
+    "name": "kingdomCoin",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "uint256", "name": "_tokenAmount", "type": "uint256" }
+    ],
+    "name": "lockFund",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lockedFunds",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxLockForEachUser",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minLockForEachUser",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -374,37 +289,8 @@
   },
   {
     "inputs": [],
-    "name": "ownerWithdrawToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
-    ],
-    "name": "refFee",
+    "name": "price",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "refTotalWithdraw",
-    "outputs": [
-      { "internalType": "address", "name": "ref_address", "type": "address" },
-      { "internalType": "uint256", "name": "totalWithdraw", "type": "uint256" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "refferal",
-    "outputs": [
-      { "internalType": "address", "name": "ref_address", "type": "address" },
-      { "internalType": "uint256", "name": "reward", "type": "uint256" }
-    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -416,93 +302,46 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_addToPoolReward",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMaxRewardPool",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "inputs": [],
+    "name": "saleActive",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "_mini", "type": "uint256" },
-      { "internalType": "uint256", "name": "_maxi", "type": "uint256" }
-    ],
-    "name": "setMin_MaxDeposit",
+    "inputs": [{ "internalType": "bool", "name": "status", "type": "bool" }],
+    "name": "saleState",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256[]", "name": "_period", "type": "uint256[]" },
-      { "internalType": "uint256[]", "name": "_percent", "type": "uint256[]" },
-      { "internalType": "bool", "name": "_update", "type": "bool" }
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "bool", "name": "status", "type": "bool" }
     ],
-    "name": "setVestingPeriod",
+    "name": "setAllowablToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_newAlloc", "type": "uint256" }
+      { "internalType": "uint256", "name": "newMinimum", "type": "uint256" },
+      { "internalType": "uint256", "name": "newMaximum", "type": "uint256" }
     ],
-    "name": "setpriceAmount",
+    "name": "setMinAndMaxLockFund",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "signal_market",
+    "inputs": [
+      { "internalType": "uint256", "name": "_price", "type": "uint256" }
+    ],
+    "name": "tokenPrice",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "tokenAdress",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "tokenAllocationAdress",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalDeposited",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "totalRewards",
-    "outputs": [
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "totalWithdraw",
-    "outputs": [
-      { "internalType": "address", "name": "user_address", "type": "address" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -516,54 +355,53 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_userAddress", "type": "address" }
+      { "internalType": "uint256", "name": "newClaimTime", "type": "uint256" }
     ],
-    "name": "userReward",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
+    "name": "updateClaimTime",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" }
-    ],
-    "name": "vesting",
-    "outputs": [
-      { "internalType": "uint8", "name": "counts", "type": "uint8" },
-      {
-        "internalType": "uint256",
-        "name": "totalWithdrawn",
-        "type": "uint256"
-      },
-      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "userAlreadyLocked",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "weekly",
+    "name": "userStorage",
     "outputs": [
-      { "internalType": "address", "name": "user_address", "type": "address" },
-      { "internalType": "uint256", "name": "startTime", "type": "uint256" },
-      { "internalType": "uint256", "name": "deadline", "type": "uint256" },
-      { "internalType": "uint256", "name": "when20Percent", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "amountDeposited",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "amountInPrice", "type": "uint256" },
+      { "internalType": "uint256", "name": "amountClaimed", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "nextClaimAmount",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "nextClaimTime", "type": "uint256" }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
-    ],
-    "name": "withdrawFee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "withdrawal",
+    "name": "withdrawBNB",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" }
+    ],
+    "name": "withdrawIERC20",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
