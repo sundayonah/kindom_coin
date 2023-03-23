@@ -37,10 +37,6 @@ body {
   --background: #0d1117;
   --button: #daa851;
 }
-span {
-  /* padding-left: 3rem; */
-  /* color: var(--button); */
-}
 
 .mainContainer {
   width: 80%;
@@ -61,7 +57,15 @@ span {
   box-shadow: -1px 1px 22px 6px rgba(34, 34, 34, 0.72);
 }
 /* LEFT WING */
-
+.contentForText {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: -5px;
+  margin: -0.5rem 2rem;
+  /* gap: 1rem; */
+  border-bottom: var(--border);
+}
 strong {
   text-indent: 2em;
   padding-left: 1em;
@@ -90,7 +94,6 @@ strong {
 .formInput {
   padding: 0 0.9rem;
 }
-
 .inputOut {
   display: flex;
   justify-content: space-between;
@@ -172,47 +175,6 @@ hr {
   color: #fff;
   border-radius: 0rem 0.5rem 0.5rem 0rem;
 }
-
-/* .input {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: transparent;
-  padding: 9px 0px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.input input {
-  padding-right: 3rem;
-  padding-top: 0.5rem;
-  padding-left: 0.5rem;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: #fff;
-  background-color: transparent;
-}
-
-.input span {
-  margin-left: 1rem;
-}
-
-.input span:first-of-type {
-  color: #1c07d6;
-  font-size: 12px;
-  background-color: #a4a0a0;
-  padding: 0.4rem;
-  border-radius: var(--radius);
-}
-
-.input span:last-of-type {
-  font-weight: bold;
-  font-size: 16px;
-  background-color: #181721;
-  padding: 0.8rem;
-  border-radius: 0rem 0.2rem 0.2rem 0rem;
-} */
 /* ................................................. */
 /* RIGHT WING */
 .rightWing {
@@ -240,6 +202,7 @@ hr {
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
+  margin-top: 1.5rem;
   /* margin-top: 2rem; */
 }
 
@@ -252,12 +215,12 @@ hr {
   color: #ffffff;
   background-color: #daa851;
 }
-.buy {
+/* .buy {
   margin-top: 1.5rem;
-}
+} */
 
 p {
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 500;
 }
 h3 {

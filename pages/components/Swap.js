@@ -146,19 +146,23 @@ export default function MyComponent() {
           {/* <Image src={Bnb} width={15} hieght={15} alt="bnb" />
           <Image src={Busd} width={15} hieght={15} alt="bnb" /> */}
           <h4>Buy King</h4>
-          <p>
-            1 BUSD = <strong>&nbsp;{kcPrice}</strong> KC
-          </p>
-          <p>
-            Min = <strong>&nbsp;{minLock}</strong>
-          </p>
-          <p>
-            Max = <strong>&nbsp;{maxLock}</strong>
-          </p>
-          <p>
-            Total Locked = <strong>&nbsp;{lockFund}</strong>
-          </p>
-          <hr />
+          <div className="contentForText">
+            <p>1 BUSD </p>
+            <strong>&nbsp;{kcPrice} KC</strong>
+          </div>
+          <div className="contentForText">
+            <p>Min</p>
+            <strong>&nbsp;{minLock}</strong>
+          </div>
+          <div className="contentForText">
+            <p>Max</p>
+            <strong>&nbsp;{maxLock}</strong>
+          </div>
+          <div className="contentForText">
+            <p>Total Locked</p>
+            <strong>&nbsp;{lockFund}</strong>
+          </div>
+          {/* <hr /> */}
 
           <div className="formInput">
             <div className="youPay">
@@ -245,15 +249,20 @@ export default function MyComponent() {
         <div className="rightWing">
           <div className="totalClaim">
             <h4>Kingdom Coin Claim</h4>
-            <p>
-              Total Claim = <strong>{totalClaim} </strong>KC
-            </p>
-            <p>
-              Next Claim Amount = <strong> {nextClaimAmount}</strong>
-            </p>
-            <p>
-              Next Claim Time: <strong> {nextClaimTime}</strong>
-            </p>
+            <div className="contentForText">
+              <p>Total Claim</p>
+              <strong>{totalClaim} KC</strong>
+            </div>
+            <div className="contentForText">
+              <p>Next Claim Amount</p>
+              <strong> {nextClaimAmount}</strong>
+            </div>
+            <div className="contentForText">
+              <p>
+                Next Claim Time
+              </p>
+                <strong> {nextClaimTime}</strong>
+            </div>
             <div className="claimButton">
               <button
                 onClick={() => handleClaim()}

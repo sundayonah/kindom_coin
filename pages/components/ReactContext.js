@@ -281,7 +281,6 @@ export const TransactionProvider = ({ children }) => {
       // // Check if the "Next Claim Date" has passed
       const now = new Date();
       const currentDateTime = now.toLocaleString();
-
       const nextClaimTimestamp = nextClaimTime;
       if (currentDateTime < nextClaimTimestamp) {
         // Disable the button
@@ -292,6 +291,8 @@ export const TransactionProvider = ({ children }) => {
         setIsNextClaimDate(false);
         console.log("you can claim now .");
       }
+      console.log(nextClaimTimestamp, "nextClaimTimestampnextClaimTimestamp");
+
       const tx = await contract.claimKingdomCoin({
         gasLimit: 500000,
         gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
