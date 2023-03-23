@@ -1,17 +1,15 @@
 [
   {
     "ticker": "BNB",
-    "img": "/pages/components/images/bnb.png.png",
-    "name": "bnb Coin",
-    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-    "decimals": 6
+    "img": "/images/bnb.png",
+    "name": "bnb",
+    "address": "0x0000000000000000000000000000000000000000"
   },
 
   {
     "ticker": "BUSD",
-    "img": "/pages/components/images/busd.png.png",
+    "img": "/images/busd.png",
     "name": "busd",
-    "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
-    "decimals": 18
+    "address": "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814"
   }
 ]
