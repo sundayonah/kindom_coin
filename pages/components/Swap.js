@@ -39,6 +39,9 @@ export default function MyComponent() {
     setIsOpen,
     isNextClaimDate,
     tokenOne,
+    kcLoading,
+    bnbBalance,
+    busdBalance,
   } = useContext(TransactionContext);
 
   // const tokens = [
@@ -125,7 +128,7 @@ export default function MyComponent() {
               >
                 {/* // inside the render method or in the map function */}
                 <Image
-                  src={e.name === "bnb" ? Bnb : Busd}
+                  src={e.name === "busd" ? Bnb : Busd}
                   alt={e.ticker}
                   width={20}
                   height={20}
@@ -167,7 +170,9 @@ export default function MyComponent() {
           <div className="formInput">
             <div className="youPay">
               <h4>You Pay</h4>
-              <h4>Bal: 900</h4>
+              <h4>{tokenOne.ticker === "BUSD" ? busdBalance : bnbBalance}</h4>
+              {/* {tokenOne.ticker === "BUSD" && <h4>Bal: {busdBalance}</h4>}
+              {tokenOne.ticker === "BNB" && <h4>Bal: {bnbBalance}</h4>} */}
             </div>
             <div className="inputOut">
               <input
@@ -178,19 +183,19 @@ export default function MyComponent() {
               />
               <button
                 className={address ? "enable" : "disAble"}
-                onClick={() => handleMaxChange()}
+                // onClick={() => handleMaxChange(busdBalance)}
+                onClick={() =>
+                  handleMaxChange(
+                    tokenOne.ticker === "BUSD" ? busdBalance : bnbBalance
+                  )
+                }
               >
                 MAX
               </button>
               <button className="assetOne" onClick={() => openModal()}>
-                {/* <Image
-                  className="assetLogo"
-                  src={Busd}
-                  width={20}
-                  height={20}
-                  alt="Logo"
-                /> */}
                 {tokenOne.ticker}
+                {/* Select Token */}
+                <RiArrowDownSFill />
               </button>
             </div>
             <div className="youPay exchange">
@@ -228,12 +233,12 @@ export default function MyComponent() {
               </button>
             ) : (
               <button className="claim buy" onClick={() => BuyKc()}>
-                {isLoading ? (
+                {kcLoading ? (
                   <div className="spinnerbtn">
                     <ScaleLoader
                       color={color}
                       cssOverride={overrideScale}
-                      loading={isLoading}
+                      loading={kcLoading}
                       size={15}
                       speedMultiplier={0.9}
                     />
@@ -258,10 +263,8 @@ export default function MyComponent() {
               <strong> {nextClaimAmount}</strong>
             </div>
             <div className="contentForText">
-              <p>
-                Next Claim Time
-              </p>
-                <strong> {nextClaimTime}</strong>
+              <p>Next Claim Time</p>
+              <strong> {nextClaimTime}</strong>
             </div>
             <div className="claimButton">
               <button

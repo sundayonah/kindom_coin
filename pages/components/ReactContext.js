@@ -26,12 +26,16 @@ export const TransactionProvider = ({ children }) => {
   const [nextClaimTime, setNextClaimTime] = useState("");
   const [isApproved, setIsApproved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [kcLoading, setKcLoading] = useState(false);
   const [switchButton, setSwitchButton] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [isNextClaimDate, setIsNextClaimDate] = useState(true);
+  const [isNextClaimDate, setIsNextClaimDate] = useState(false);
+  const [bnbBalance, setBnbBalance] = useState("");
+  const [busdBalance, setBusdBalance] = useState("");
+
   // const [selectedToken, setSelectedToken] = useState();
 
-  const contractAddress = "0x0Fd0ECF9ca6b82591850353e2E94F37EbDd21947";
+  const contractAddress = "0x79ff338CB4599740bC30B266714658Eed00A59aa";
   const bscAddress = "0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814";
   const address = useAddress();
   // console.log(address, "user address ...,.,.,..,..,.,user");
@@ -39,11 +43,19 @@ export const TransactionProvider = ({ children }) => {
   //message
   const [messageApi, contextHolder] = message.useMessage();
 
+  let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
+  let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
+
+  const [tokenIn, setTokenIn] = useState("");
+  const [payAbleAmount, setPayableAmount] = useState("");
+  const [busdAmount, setBusdAmount] = useState("");
+  let selectedToken;
+
   //success f(x)
   const success = () => {
     messageApi.open({
       type: "success",
-      content: "This is a success message",
+      content: "Transaction Successfull",
     });
   };
 
@@ -51,35 +63,114 @@ export const TransactionProvider = ({ children }) => {
   const error = () => {
     messageApi.open({
       type: "error",
-      content: "This is an error message",
+      content: "Transaction not Successfull",
     });
   };
 
-  function modifyToken(token, i) {
+  //GET BALANCE IN BNB
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const bnbBalance = await provider.getBalance(address);
+        setBnbBalance(
+          parseFloat(ethers.utils.formatEther(bnbBalance)).toFixed(3)
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (address) {
+      fetchBalance();
+    }
+  }, [address]);
+
+  //GET BALLANCE IN BUSD
+  useEffect(() => {
+    const busdBalance = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profile = new ethers.Contract(bscAddress, bscAbi, signer);
+        const bal = await profile.balanceOf(address);
+        const balance = ethers.utils.formatEther(bal, "ether");
+        const etherAmountAsNumber = parseFloat(balance.toString());
+        const roundedEtherAmount = etherAmountAsNumber.toFixed();
+        setBusdBalance(roundedEtherAmount);
+        console.log(roundedEtherAmount, "format acc in BUSD");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    busdBalance();
+  }, [address]);
+
+  // async function loadValues(_tokenIn, amountInBNB, amount) {
+  //   tokenIn = _tokenIn;
+  //   payAbleAmount = amountInBNB;
+  //   BusdAmount = (amount * 10 ** 18).toString();
+  //   console.log(tokenIn, payAbleAmount, BusdAmount)
+  //   if (amountInBNB !== 0) {
+  //     return [tokenIn, amountInBNB];
+  //   } else {
+  //     return [tokenIn, amount];
+  //   }
+  // }
+  // const valueAmount = ethers.utils.parseUnits(v1, "ether")
+
+  // let valueAmount;
+  // try {
+  //   valueAmount = ethers.utils.parseUnits(v1, "ether");
+  // } catch (e) {
+  //   valueAmount = ethers.utils.parseUnits("0", "ether");
+  // // }
+
+  // const valueAmount = v1 && ethers.utils.parseUnits(v1.toString(), "ether");
+  // console.log(valueAmount, "valueAmountvalueAmountvalueAmount");
+
+  async function modifyToken(token, i) {
     if (token.name == "bnb") {
-      console.log(token.address, "BNB");
+      setTokenIn(BNB);
+      setPayableAmount(v1);
+      // setPayableAmount(ethers.utils.parseUnits(v1.toString(), "ether"));
+      console.log(BNB, "bnb ....");
     } else {
-      console.log(token.address, "BUSD");
+      setTokenIn(BUSD);
+      setBusdAmount(v1);
+      console.log(BUSD, "busd ....");
+
+      // setBusdAmount(ethers.utils.parseUnits(v1, "ether"));
+      // (ethers.utils.parseUnits(v1, "ether")); // (v1 * 10 ** 18).toString()
     }
     if (changeToken === 1) {
       setTokenOne(tokens[i]);
+      console.log("yes");
     } else {
       setTokenTwo(tokens[i]);
+      console.log("no");
     }
     setIsOpen(false);
   }
+  useEffect(() => {
+    console.log(payAbleAmount.toString(), "payable amount changed");
+  }, [payAbleAmount]);
 
   const handleMaxChange = async (e) => {
     setV1(e);
     setV2(e);
   };
+  //working
   const handleV1Change = async (e) => {
     setV1(e.target.value);
     // const value = ethers.utils.parseUnits(e.target.value.toString(), "ether");
     const outputAmount = e.target.value * 0.065;
-    console.log(outputAmount, "outputAmount");
     setV2(outputAmount);
   };
+
+  // function handleV1Change(event) {
+  //   const inputValue = event.target.value;
+  //   setV1(inputValue);
+  // }
 
   //BNB TO KC
   useEffect(() => {
@@ -208,8 +299,8 @@ export const TransactionProvider = ({ children }) => {
         gasLimit: 61000,
       });
 
-      setV1("");
-      setV2("");
+      // setV1("");
+      // setV2("");
       console.log(tx, "TRANSACTION");
 
       const receipt = await tx.wait();
@@ -235,38 +326,78 @@ export const TransactionProvider = ({ children }) => {
 
   // console.log(tokens,"tokens tokens")
 
-  let BNB = "0x0000000000000000000000000000000000000000";
-  let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
-  let tokenIn;
-  let payAbleAmount;
-  let BusdAmount;
-  let selectedToken;
-
   ///BUYkc
   const BuyKc = async (e) => {
+    setKcLoading(true);
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(contractAddress, routerAbi, signer);
-      // const amount = ethers.utils.parseUnits("0.1", "gwei");
 
-      if ((selectedToken = BNB)) {
-        tokenIn = BNB;
-        payAbleAmount(e.target.value);
+      if (tokenIn) {
+        const __amount = ethers.utils.parseUnits(
+          payAbleAmount.toString(),
+          "ether"
+        );
+        const tx = await contract.lockFund(tokenIn, 0, {
+          value: ethers.BigNumber.from(__amount),
+          gasLimit: 500000,
+          gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+        });
+
+        setV1("");
+        setV2("");
+        // setSwitchButton(false);
+        const receipt = await tx.wait();
+
+        if (receipt.status === 1) {
+          success();
+          setStatus("success");
+        } else {
+          error();
+          setStatus("error");
+        }
       } else {
-        tokenIn = BUSD;
-        payAbleAmount = 0;
-        BUSD = BusdAmount; //where is this comming from
+        console.log("Please select a token to purchase");
       }
-      const tx = await contract.lockFund(tokenIn, BusdAmount, {
-        value: payAbleAmount,
-        gasLimit: 500000,
-        gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-      });
-      setSwitchButton(false);
     } catch (err) {
       console.error(err);
+      error();
+      setStatus("error");
     }
+    setKcLoading(false);
+
+    //   const __amount = ethers.utils.formatUnits(payAbleAmount, "ether");
+    //   // console.log(
+    //   //   tokenIn,
+    //   //   busdAmount.toString(),
+    //   //   __amount,
+    //   //   "kakakakakakakakak"
+    //   // );
+    //   const tx = await contract.lockFund(tokenIn, 0, {
+    //     value: __amount, //`${__amount}`,
+    //     gasLimit: 500000,
+    //     gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+    //   });
+    //   setV1("");
+    //   setV2("");
+    //   setSwitchButton(false);
+    //   const receipt = await tx.wait();
+
+    //   //   check if the transaction was successful
+    //   if (receipt.status === 1) {
+    //     success();
+    //     setStatus("success");
+    //   } else {
+    //     error();
+    //     setStatus("error");
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    //   error();
+    //   setStatus("error");
+    // }
+    // setKcLoading(false);
   };
 
   //CLAIM F(X)
@@ -320,6 +451,8 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        busdBalance,
+        bnbBalance,
         modifyToken,
         isNextClaimDate,
         address,
@@ -328,6 +461,7 @@ export const TransactionProvider = ({ children }) => {
         setIsOpen,
         BuyKc,
         switchButton,
+        kcLoading,
         isLoading,
         isApproved,
         Approved,
