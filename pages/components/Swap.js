@@ -61,9 +61,6 @@ export default function MyComponent() {
   // ];
 
   const [check, setCheck] = useState(false);
-  // const [changeToken, setChangeToken] = useState(1);
-  // const [tokenOne, setTokenOne] = useState(tokens[0]);
-  // const [tokenTwo, setTokenTwo] = useState(tokens[1]);
   const [color, setColor] = useState("#ffffff");
 
   function openModal(asset) {
