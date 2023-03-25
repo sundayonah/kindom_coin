@@ -128,7 +128,7 @@ export default function MyComponent() {
               >
                 {/* // inside the render method or in the map function */}
                 <Image
-                  src={e.name === "busd" ? Bnb : Busd}
+                  src={e.name === "busd" ? Busd : Bnb}
                   alt={e.ticker}
                   width={20}
                   height={20}
@@ -143,7 +143,6 @@ export default function MyComponent() {
           })}
         </div>
       </Modal>
-
       <div className="mainContainer">
         <div className="leftWing">
           {/* <Image src={Bnb} width={15} hieght={15} alt="bnb" />
@@ -192,9 +191,9 @@ export default function MyComponent() {
               >
                 MAX
               </button>
-              <button className="assetOne" onClick={() => openModal()}>
-                {tokenOne.ticker}
+              <button className="assetOne" onClick={() => openModal(1)}>
                 {/* Select Token */}
+                {tokenOne.ticker}
                 <RiArrowDownSFill />
               </button>
             </div>

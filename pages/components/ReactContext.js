@@ -8,7 +8,10 @@ import tokens from "./tokenList.json";
 
 export const TransactionContext = createContext({});
 export const TransactionProvider = ({ children }) => {
-  const [changeToken, setChangeToken] = useState(1);
+  let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
+  let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
+
+  const [changeToken, setChangeToken] = useState(BNB);
   const [tokenOne, setTokenOne] = useState(tokens[0]);
   const [tokenTwo, setTokenTwo] = useState(tokens[1]);
 
@@ -43,11 +46,8 @@ export const TransactionProvider = ({ children }) => {
   //message
   const [messageApi, contextHolder] = message.useMessage();
 
-  let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
-  let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
-
-  const [tokenIn, setTokenIn] = useState("");
-  const [payAbleAmount, setPayableAmount] = useState("");
+  const [tokenIn, setTokenIn] = useState(BNB);
+  const [payAbleAmount, setPayableAmount] = useState(v1);
   const [busdAmount, setBusdAmount] = useState("");
   let selectedToken;
 
@@ -105,28 +105,19 @@ export const TransactionProvider = ({ children }) => {
     busdBalance();
   }, [address]);
 
-  // async function loadValues(_tokenIn, amountInBNB, amount) {
-  //   tokenIn = _tokenIn;
-  //   payAbleAmount = amountInBNB;
-  //   BusdAmount = (amount * 10 ** 18).toString();
-  //   console.log(tokenIn, payAbleAmount, BusdAmount)
-  //   if (amountInBNB !== 0) {
-  //     return [tokenIn, amountInBNB];
-  //   } else {
-  //     return [tokenIn, amount];
-  //   }
-  // }
-  // const valueAmount = ethers.utils.parseUnits(v1, "ether")
-
-  // let valueAmount;
-  // try {
-  //   valueAmount = ethers.utils.parseUnits(v1, "ether");
-  // } catch (e) {
-  //   valueAmount = ethers.utils.parseUnits("0", "ether");
-  // // }
-
   // const valueAmount = v1 && ethers.utils.parseUnits(v1.toString(), "ether");
   // console.log(valueAmount, "valueAmountvalueAmountvalueAmount");
+
+  // function modifyToken(token) {
+  //   if (token.name === "bnb") {
+  //     setTokenIn(BNB);
+  //     setPayableAmount(v1);
+  //   } else {
+  //     setTokenIn(BUSD);
+  //     setBusdAmount(v1);
+  //   }
+  //   setIsOpen(false);
+  // }
 
   async function modifyToken(token, i) {
     if (token.name == "bnb") {
@@ -142,7 +133,7 @@ export const TransactionProvider = ({ children }) => {
       // setBusdAmount(ethers.utils.parseUnits(v1, "ether"));
       // (ethers.utils.parseUnits(v1, "ether")); // (v1 * 10 ** 18).toString()
     }
-    if (changeToken === 1) {
+    if (changeToken === BNB) {
       setTokenOne(tokens[i]);
       console.log("yes");
     } else {
@@ -151,6 +142,7 @@ export const TransactionProvider = ({ children }) => {
     }
     setIsOpen(false);
   }
+
   useEffect(() => {
     console.log(payAbleAmount.toString(), "payable amount changed");
   }, [payAbleAmount]);
@@ -310,6 +302,8 @@ export const TransactionProvider = ({ children }) => {
         setSwitchButton(false);
         success();
         setStatus("success");
+
+        //   // Set tokenIn state variable to BUSD if it is not already set
       } else {
         error();
         setStatus("error");
@@ -320,6 +314,9 @@ export const TransactionProvider = ({ children }) => {
       console.error(error);
     }
     setIsLoading(false);
+    setTokenIn(bscAddress);
+    setBusdAmount(v1);
+
     // error();
     // setStatus("error");
   };
@@ -333,32 +330,63 @@ export const TransactionProvider = ({ children }) => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(contractAddress, routerAbi, signer);
+      const __amount = ethers.utils.parseUnits(v1, "ether");
+
+      console.log("Please select a token to purchase");
+
+      console.log(busdAmount * 10 ** 18, "busdAmount");
+      console.log(tokenIn, "tokenIn");
+      console.log("payAbleAmount", payAbleAmount);
+      console.log("v1 v1 v1", v1);
 
       if (tokenIn) {
-        const __amount = ethers.utils.parseUnits(
-          payAbleAmount.toString(),
-          "ether"
-        );
-        const tx = await contract.lockFund(tokenIn, 0, {
-          value: ethers.BigNumber.from(__amount),
+        // Set a default token if one has not been selected
+        setTokenIn(BNB); // or BUSD
+
+        console.log(BNB, "BNB BNB BNB BNB BNB");
+
+        // const token = tokenIn === "bnb" ? BNB : BUSD;
+        // const __amount =
+        //   tokenIn === "bnb"
+        //     ? ethers.utils.parseUnits(payAbleAmount.toString(), "ether")
+        //     : ethers.utils.parseUnits(busdAmount.toString(), "ether");
+
+        // const tx = await contract.lockFund(token, 0, {
+        //   value: ethers.BigNumber.from(__amount),
+        //   gasLimit: 500000,
+        //   gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+        // });
+
+        // if (tokenIn) {
+        // const busdAmt = ethers.utils.parseUnits(busdAmount.toString(), "ether");
+      } else {
+        setTokenIn(BUSD); // or BUSD
+
+        console.log(BUSD, "BUSD BUSD BUSD BUSD BUSD");
+      }
+      const tx = await contract.lockFund(
+        tokenIn,
+        __amount,
+        // v1.toString(), //ethers.BigNumber.from(__amount),
+        {
+          // (busdAmount * 10 ** 18).toString(),
+          // value: v1.toString(), //ethers.BigNumber.from(__amount),
           gasLimit: 500000,
           gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-        });
-
-        setV1("");
-        setV2("");
-        // setSwitchButton(false);
-        const receipt = await tx.wait();
-
-        if (receipt.status === 1) {
-          success();
-          setStatus("success");
-        } else {
-          error();
-          setStatus("error");
         }
+      );
+
+      // setV1("");
+      // setV2("");
+      setSwitchButton(true);
+      const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        success();
+        setStatus("success");
       } else {
-        console.log("Please select a token to purchase");
+        error();
+        setStatus("error");
       }
     } catch (err) {
       console.error(err);
@@ -366,6 +394,7 @@ export const TransactionProvider = ({ children }) => {
       setStatus("error");
     }
     setKcLoading(false);
+    console.log(v1, "v2222222222222222v1v1v1v1vv1v1v1v1");
 
     //   const __amount = ethers.utils.formatUnits(payAbleAmount, "ether");
     //   // console.log(
