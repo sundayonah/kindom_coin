@@ -125,7 +125,7 @@ export default function MyComponent() {
               >
                 {/* // inside the render method or in the map function */}
                 <Image
-                  src={e.name === "busd" ? Busd : Bnb}
+                  src={e.name === "busd" ? Bnb : Busd}
                   alt={e.ticker}
                   width={20}
                   height={20}
@@ -166,7 +166,7 @@ export default function MyComponent() {
           <div className="formInput">
             <div className="youPay">
               <h4>You Pay</h4>
-              <h4>{tokenOne.name === "BUSD" ? busdBalance : bnbBalance}</h4>
+              <h4>{tokenOne.name === "busd" ? busdBalance : bnbBalance}</h4>
             </div>
             <div className="inputOut">
               <input
@@ -208,7 +208,7 @@ export default function MyComponent() {
             </div>
           </div>
           <div className="claimButton">
-            {switchButton && tokenOne.name !== "bnb" ? (
+            {!switchButton && tokenOne.name !== "bnb" ? (
               <button className="claim buy" onClick={() => Approved()}>
                 {isLoading ? (
                   <div className="spinnerbtn">

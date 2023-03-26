@@ -9,7 +9,7 @@ import tokens from "./tokenList.json";
 export const TransactionContext = createContext({});
 export const TransactionProvider = ({ children }) => {
   let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
-  let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
+  let BUSD = "0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814";
 
   const [changeToken, setChangeToken] = useState(BNB);
   const [tokenOne, setTokenOne] = useState(tokens[0]);
@@ -38,6 +38,8 @@ export const TransactionProvider = ({ children }) => {
 
   // const [selectedToken, setSelectedToken] = useState();
 
+  // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
+  // let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
   const contractAddress = "0x79ff338CB4599740bC30B266714658Eed00A59aa";
   const bscAddress = "0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814";
   const address = useAddress();
@@ -46,7 +48,7 @@ export const TransactionProvider = ({ children }) => {
   //message
   const [messageApi, contextHolder] = message.useMessage();
 
-  const [tokenIn, setTokenIn] = useState(BNB);
+  const [tokenIn, setTokenIn] = useState(BUSD);
   const [payAbleAmount, setPayableAmount] = useState(v1);
   const [busdAmount, setBusdAmount] = useState("");
   let selectedToken;
@@ -314,11 +316,8 @@ export const TransactionProvider = ({ children }) => {
       console.error(error);
     }
     setIsLoading(false);
-    setTokenIn(bscAddress);
-    setBusdAmount(v1);
-
-    // error();
-    // setStatus("error");
+    // setTokenIn(bscAddress);
+    // setBusdAmount(v1);
   };
 
   // console.log(tokens,"tokens tokens")
@@ -332,77 +331,20 @@ export const TransactionProvider = ({ children }) => {
       const contract = new ethers.Contract(contractAddress, routerAbi, signer);
       const __amount = ethers.utils.parseUnits(v1, "ether");
 
-      console.log("Please select a token to purchase");
-
       console.log(busdAmount * 10 ** 18, "busdAmount");
       console.log(tokenIn, "tokenIn");
       console.log("payAbleAmount", payAbleAmount);
       console.log("v1 v1 v1", v1);
-      //add contractAddress,
 
-      //     // Set a default token if one has not been selected
-      //     setTokenIn(BNB); // or BUSD
+      if (tokenIn === BUSD) {
+        console.log("Buying with BUSD...");
+      } else if (tokenIn === BNB) {
+        console.log("Buying with BNB...");
+      } else {
+        console.error("Invalid token address!");
+        return;
+      }
 
-      //     console.log(BNB, "BNB BNB BNB BNB BNB");
-
-      //     // const token = tokenIn === "bnb" ? BNB : BUSD;
-      //     // const __amount =
-      //     //   tokenIn === "bnb"
-      //     //     ? ethers.utils.parseUnits(payAbleAmount.toString(), "ether")
-      //     //     : ethers.utils.parseUnits(busdAmount.toString(), "ether");
-
-      //     // const tx = await contract.lockFund(token, 0, {
-      //     //   value: ethers.BigNumber.from(__amount),
-      //     //   gasLimit: 500000,
-      //     //   gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-      //     // });
-
-      //     // if (tokenIn) {
-      //     // const busdAmt = ethers.utils.parseUnits(busdAmount.toString(), "ether");
-      //   } else {
-      //     setTokenIn(BUSD); // or BUSD
-
-      //     console.log(BUSD, "BUSD BUSD BUSD BUSD BUSD");
-      //   }
-      //   const tx = await contract.lockFund(
-      //     tokenIn,
-      //     __amount,
-      //     // v1.toString(), //ethers.BigNumber.from(__amount),
-      //     {
-      //       // (busdAmount * 10 ** 18).toString(),
-      //       // value: v1.toString(), //ethers.BigNumber.from(__amount),
-      //       gasLimit: 500000,
-      //       gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-      //     }
-      //   );
-
-      //   // setV1("");
-      //   // setV2("");
-      //   setSwitchButton(true);
-      //   const receipt = await tx.wait();
-
-      //   if (receipt.status === 1) {
-      //     success();
-      //     setStatus("success");
-      //   } else {
-      //     error();
-      //     setStatus("error");
-      //   }
-      // } catch (err) {
-      //   console.error(err);
-      //   error();
-      //   setStatus("error");
-      // }
-      // setKcLoading(false);
-      // console.log(v1, "v2222222222222222v1v1v1v1vv1v1v1v1");
-
-      // const __amount = ethers.utils.formatUnits(payAbleAmount, "ether");
-      // console.log(
-      //   tokenIn,
-      //   busdAmount.toString(),
-      //   __amount,
-      //   "kakakakakakakakak"
-      // );
       const tx = await contract.lockFund(tokenIn, __amount, {
         value: ethers.BigNumber.from(__amount),
         // __amount, //`${__amount}`,

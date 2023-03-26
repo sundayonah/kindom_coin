@@ -9,6 +9,7 @@
     "ticker": "BNB",
     "img": "/images/bnb.png",
     "name": "bnb",
-    "address": "0x0000000000000000000000000000000000000000"
+    "address": "0x0000000000000000000000000000000000000000",
+    "address1": "0xae13d989dac2f0debff460ac112a837c89baa7cd"
   }
 ]
