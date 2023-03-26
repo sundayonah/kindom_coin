@@ -166,9 +166,7 @@ export default function MyComponent() {
           <div className="formInput">
             <div className="youPay">
               <h4>You Pay</h4>
-              <h4>{tokenOne.ticker === "BUSD" ? busdBalance : bnbBalance}</h4>
-              {/* {tokenOne.ticker === "BUSD" && <h4>Bal: {busdBalance}</h4>}
-              {tokenOne.ticker === "BNB" && <h4>Bal: {bnbBalance}</h4>} */}
+              <h4>{tokenOne.name === "BUSD" ? busdBalance : bnbBalance}</h4>
             </div>
             <div className="inputOut">
               <input
@@ -188,7 +186,7 @@ export default function MyComponent() {
               >
                 MAX
               </button>
-              <button className="assetOne" onClick={() => openModal(1)}>
+              <button className="assetOne" onClick={() => openModal()}>
                 {/* Select Token */}
                 {tokenOne.ticker}
                 <RiArrowDownSFill />

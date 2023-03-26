@@ -338,49 +338,83 @@ export const TransactionProvider = ({ children }) => {
       console.log(tokenIn, "tokenIn");
       console.log("payAbleAmount", payAbleAmount);
       console.log("v1 v1 v1", v1);
+      //add contractAddress,
 
-      if (tokenIn) {
-        // Set a default token if one has not been selected
-        setTokenIn(BNB); // or BUSD
+      //     // Set a default token if one has not been selected
+      //     setTokenIn(BNB); // or BUSD
 
-        console.log(BNB, "BNB BNB BNB BNB BNB");
+      //     console.log(BNB, "BNB BNB BNB BNB BNB");
 
-        // const token = tokenIn === "bnb" ? BNB : BUSD;
-        // const __amount =
-        //   tokenIn === "bnb"
-        //     ? ethers.utils.parseUnits(payAbleAmount.toString(), "ether")
-        //     : ethers.utils.parseUnits(busdAmount.toString(), "ether");
+      //     // const token = tokenIn === "bnb" ? BNB : BUSD;
+      //     // const __amount =
+      //     //   tokenIn === "bnb"
+      //     //     ? ethers.utils.parseUnits(payAbleAmount.toString(), "ether")
+      //     //     : ethers.utils.parseUnits(busdAmount.toString(), "ether");
 
-        // const tx = await contract.lockFund(token, 0, {
-        //   value: ethers.BigNumber.from(__amount),
-        //   gasLimit: 500000,
-        //   gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-        // });
+      //     // const tx = await contract.lockFund(token, 0, {
+      //     //   value: ethers.BigNumber.from(__amount),
+      //     //   gasLimit: 500000,
+      //     //   gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+      //     // });
 
-        // if (tokenIn) {
-        // const busdAmt = ethers.utils.parseUnits(busdAmount.toString(), "ether");
-      } else {
-        setTokenIn(BUSD); // or BUSD
+      //     // if (tokenIn) {
+      //     // const busdAmt = ethers.utils.parseUnits(busdAmount.toString(), "ether");
+      //   } else {
+      //     setTokenIn(BUSD); // or BUSD
 
-        console.log(BUSD, "BUSD BUSD BUSD BUSD BUSD");
-      }
-      const tx = await contract.lockFund(
-        tokenIn,
-        __amount,
-        // v1.toString(), //ethers.BigNumber.from(__amount),
-        {
-          // (busdAmount * 10 ** 18).toString(),
-          // value: v1.toString(), //ethers.BigNumber.from(__amount),
-          gasLimit: 500000,
-          gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-        }
-      );
+      //     console.log(BUSD, "BUSD BUSD BUSD BUSD BUSD");
+      //   }
+      //   const tx = await contract.lockFund(
+      //     tokenIn,
+      //     __amount,
+      //     // v1.toString(), //ethers.BigNumber.from(__amount),
+      //     {
+      //       // (busdAmount * 10 ** 18).toString(),
+      //       // value: v1.toString(), //ethers.BigNumber.from(__amount),
+      //       gasLimit: 500000,
+      //       gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+      //     }
+      //   );
 
+      //   // setV1("");
+      //   // setV2("");
+      //   setSwitchButton(true);
+      //   const receipt = await tx.wait();
+
+      //   if (receipt.status === 1) {
+      //     success();
+      //     setStatus("success");
+      //   } else {
+      //     error();
+      //     setStatus("error");
+      //   }
+      // } catch (err) {
+      //   console.error(err);
+      //   error();
+      //   setStatus("error");
+      // }
+      // setKcLoading(false);
+      // console.log(v1, "v2222222222222222v1v1v1v1vv1v1v1v1");
+
+      // const __amount = ethers.utils.formatUnits(payAbleAmount, "ether");
+      // console.log(
+      //   tokenIn,
+      //   busdAmount.toString(),
+      //   __amount,
+      //   "kakakakakakakakak"
+      // );
+      const tx = await contract.lockFund(tokenIn, __amount, {
+        value: ethers.BigNumber.from(__amount),
+        // __amount, //`${__amount}`,
+        gasLimit: 500000,
+        gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+      });
       // setV1("");
       // setV2("");
-      setSwitchButton(true);
+      setSwitchButton(false);
       const receipt = await tx.wait();
 
+      //   check if the transaction was successful
       if (receipt.status === 1) {
         success();
         setStatus("success");
@@ -394,39 +428,6 @@ export const TransactionProvider = ({ children }) => {
       setStatus("error");
     }
     setKcLoading(false);
-    console.log(v1, "v2222222222222222v1v1v1v1vv1v1v1v1");
-
-    //   const __amount = ethers.utils.formatUnits(payAbleAmount, "ether");
-    //   // console.log(
-    //   //   tokenIn,
-    //   //   busdAmount.toString(),
-    //   //   __amount,
-    //   //   "kakakakakakakakak"
-    //   // );
-    //   const tx = await contract.lockFund(tokenIn, 0, {
-    //     value: __amount, //`${__amount}`,
-    //     gasLimit: 500000,
-    //     gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-    //   });
-    //   setV1("");
-    //   setV2("");
-    //   setSwitchButton(false);
-    //   const receipt = await tx.wait();
-
-    //   //   check if the transaction was successful
-    //   if (receipt.status === 1) {
-    //     success();
-    //     setStatus("success");
-    //   } else {
-    //     error();
-    //     setStatus("error");
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   error();
-    //   setStatus("error");
-    // }
-    // setKcLoading(false);
   };
 
   //CLAIM F(X)
