@@ -52,26 +52,26 @@ export const TransactionProvider = ({ children }) => {
   const [payAbleAmount, setPayableAmount] = useState(v1);
   const [busdAmount, setBusdAmount] = useState("");
 
-  // async function modifyToken(token, i) {
-  //   if (token.name === "bnb") {
-  //     setTokenIn(BNB);
-  //     setPayableAmount(v1);
-  //     setChangeToken(BNB); // update changeToken for BNB
-  //   } else {
-  //     setTokenIn(BUSD);
-  //     setBusdAmount(v1);
-  //     setChangeToken(BUSD); // update changeToken for BUSD
-  //   }
+  async function modifyToken(token, i) {
+    if (token.name === "bnb") {
+      setTokenIn(BNB);
+      setPayableAmount(v1);
+      setChangeToken(BNB); // update changeToken for BNB
+    } else {
+      setTokenIn(BUSD);
+      setBusdAmount(v1);
+      setChangeToken(BUSD); // update changeToken for BUSD
+    }
 
-  //   if (changeToken === 1) {
-  //     setTokenTwo(tokens[i]);
-  //     console.log("yes");
-  //   } else {
-  //     setTokenOne(tokens[i]);
-  //     console.log("no");
-  //   }
-  //   setIsOpen(false);
-  // }
+    if (changeToken === 1) {
+      setTokenTwo(tokens[i]);
+      console.log("yes");
+    } else {
+      setTokenOne(tokens[i]);
+      console.log("no");
+    }
+    setIsOpen(false);
+  }
 
   // const valueAmount = v1 && ethers.utils.parseUnits(v1.toString(), "ether");
   // console.log(valueAmount, "valueAmountvalueAmountvalueAmount");
@@ -87,31 +87,31 @@ export const TransactionProvider = ({ children }) => {
   //   setIsOpen(false);
   // }
 
-  async function modifyToken(token, i) {
-    if (token.name == "bnb") {
-      setTokenIn(BNB);
-      setPayableAmount(v1);
-      // setPayableAmount(ethers.utils.parseUnits(v1.toString(), "ether"));
-      console.log(BNB, "bnb ....");
-    } else {
-      setTokenIn(BUSD);
-      setBusdAmount(v1);
-      console.log(BUSD, "busd ....");
+  // async function modifyToken(token, i) {
+  //   if (token.name == "bnb") {
+  //     setTokenIn(BNB);
+  //     setPayableAmount(v1);
+  //     // setPayableAmount(ethers.utils.parseUnits(v1.toString(), "ether"));
+  //     console.log(BNB, "bnb ....");
+  //   } else {
+  //     setTokenIn(BUSD);
+  //     setBusdAmount(v1);
+  //     console.log(BUSD, "busd ....");
 
-      // setBusdAmount(ethers.utils.parseUnits(v1, "ether"));
-      // (ethers.utils.parseUnits(v1, "ether")); // (v1 * 10 ** 18).toString()
-    }
-    if (changeToken === BNB) {
-      setTokenOne(tokens[i]);
-      console.log("yes");
-    } else {
-      setTokenTwo(tokens[i]);
-      setBusdAmount(v1);
+  //     // setBusdAmount(ethers.utils.parseUnits(v1, "ether"));
+  //     // (ethers.utils.parseUnits(v1, "ether")); // (v1 * 10 ** 18).toString()
+  //   }
+  //   if (changeToken === BNB) {
+  //     setTokenOne(tokens[i]);
+  //     console.log("yes");
+  //   } else {
+  //     setTokenTwo(tokens[i]);
+  //     setBusdAmount(v1);
 
-      console.log("no");
-    }
-    setIsOpen(false);
-  }
+  //     console.log("no");
+  //   }
+  //   setIsOpen(false);
+  // }
 
   //success f(x)
   const success = () => {
@@ -345,7 +345,7 @@ export const TransactionProvider = ({ children }) => {
   // console.log(tokens,"tokens tokens")
 
   ///BUYkc
-  const BuyKc = async (e) => {
+  const BuyKc = async () => {
     setKcLoading(true);
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -358,37 +358,42 @@ export const TransactionProvider = ({ children }) => {
       console.log("payAbleAmount", payAbleAmount);
       console.log("v1 v1 v1", v1);
 
+      let tx; // declare tx outside the if-else block
+
       if (tokenIn === BUSD) {
-        setTokenIn(BUSD);
-        setBusdAmount(v1);
-        setChangeToken(BUSD); // update changeToken for BUSD
         console.log("Buying with BUSD...");
+        const tx = await contract.lockFund(BUSD, __amount, {
+          // value: ethers.BigNumber.from(__amount),
+          gasLimit: 500000,
+          gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+        });
       } else if (tokenIn === BNB) {
         console.log("Buying with BNB...");
+        // buy KC with BNB
+        const tx = await contract.lockFund(BNB, __amount, {
+          value: ethers.BigNumber.from(__amount),
+          gasLimit: 500000,
+          gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+        });
       } else {
         console.error("Invalid token address!");
         return;
       }
 
-      const tx = await contract.lockFund(tokenIn, __amount, {
-        value: ethers.BigNumber.from(__amount),
-        // __amount, //`${__amount}`,
-        // gasLimit: 500000,
-        gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-      });
       // setV1("");
       // setV2("");
-      setSwitchButton(false);
-      const receipt = await tx.wait();
+      // setSwitchButton(false);
 
-      //   check if the transaction was successful
-      if (receipt.status === 1) {
-        success();
-        setStatus("success");
-      } else {
-        error();
-        setStatus("error");
-      }
+      // const receipt = await tx.wait();
+
+      // //   check if the transaction was successful
+      // if (receipt.status === 1) {
+      //   success();
+      //   setStatus("success");
+      // } else {
+      //   error();
+      //   setStatus("error");
+      // }
     } catch (err) {
       console.error(err);
       error();

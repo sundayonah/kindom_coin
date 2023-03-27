@@ -210,7 +210,7 @@ export default function MyComponent() {
             </div>
           </div>
           <div className="claimButton">
-            {!switchButton && tokenOne.name !== "bnb" ? (
+            {switchButton && tokenOne.name !== "bnb" ? (
               <button className="claim buy" onClick={() => Approved()}>
                 {isLoading ? (
                   <div className="spinnerbtn">
