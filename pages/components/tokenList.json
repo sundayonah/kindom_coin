@@ -2,14 +2,11 @@
   {
     "ticker": "BUSD",
     "img": "/images/busd.png",
-    "name": "busd",
-    "address": "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814"
+    "name": "busd"
   },
   {
     "ticker": "BNB",
     "img": "/images/bnb.png",
-    "name": "bnb",
-    "address": "0x0000000000000000000000000000000000000000",
-    "address1": "0xae13d989dac2f0debff460ac112a837c89baa7cd"
+    "name": "bnb"
   }
 ]

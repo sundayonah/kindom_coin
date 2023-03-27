@@ -42,6 +42,7 @@ export default function MyComponent() {
     kcLoading,
     bnbBalance,
     busdBalance,
+    setChangeToken,
   } = useContext(TransactionContext);
 
   // const tokens = [
@@ -134,6 +135,7 @@ export default function MyComponent() {
                 <div className="tokenChoiceNames">
                   <div className="tokenName">{e.name}</div>
                   <div className="tokenTicker">{e.ticker}</div>
+                  {/* <div className="tokenTicker">{e.address1}</div> */}
                 </div>
               </div>
             );
