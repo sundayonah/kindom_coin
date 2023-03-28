@@ -429,7 +429,7 @@ export const TransactionProvider = ({ children }) => {
       const contract = new ethers.Contract(contractAddress, routerAbi, signer);
       // const amount = ethers.utils.parseUnits("0.1", "gwei");
 
-      // // Check if the "Next Claim Date" has passed
+      // Check if the "Next Claim Date" has passed
       const now = new Date();
       const currentDateTime = now.toLocaleString();
       const nextClaimTimestamp = nextClaimTime;
@@ -461,10 +461,10 @@ export const TransactionProvider = ({ children }) => {
       }
     } catch (err) {
       console.error(err);
-      setSpinLoading(false);
       error();
       setStatus("error");
     }
+    setSpinLoading(false);
   };
 
   return (

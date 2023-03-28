@@ -134,11 +134,9 @@ hr {
   cursor: pointer;
 }
 
-
-
 /* Disabled button style */
 .disAble {
-  padding: 0.8rem 2.5rem;
+  padding: 0.8rem 6.5rem;
   background-color: gray;
   border-radius: var(--radius);
   color: white;

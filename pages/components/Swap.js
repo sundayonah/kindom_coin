@@ -211,10 +211,10 @@ export default function MyComponent() {
                 <RiArrowDownSFill />
               </button>
             </div>
-            <div className="youPay exchange">
+            {/* <div className="youPay exchange">
               <h4>Exchange Rate</h4>
               <h4>0.1 BUSD per KD</h4>
-            </div>
+            </div> */}
             <div className="youPay">
               <h4>You get</h4>
             </div>
@@ -252,7 +252,6 @@ export default function MyComponent() {
                     BuyKc();
                   } else {
                     setIsSale(true);
-                    console.log("sale not started yet");
                   }
                 }}
               >
