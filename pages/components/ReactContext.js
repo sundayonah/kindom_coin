@@ -355,10 +355,9 @@ export const TransactionProvider = ({ children }) => {
       const contract = new ethers.Contract(contractAddress, routerAbi, signer);
       const __amount = ethers.utils.parseUnits(v1, "ether");
 
-      console.log(busdAmount * 10 ** 18, "busdAmount");
-      console.log(tokenIn, "tokenIn");
-      console.log("payAbleAmount", payAbleAmount);
-      console.log("v1 v1 v1", v1);
+      // const sale = await contract.saleActive();
+      // console.log(sale, "sale sale sale");
+      // setIsSaleActive(sale);
 
       let tx; // declare tx outside the if-else block
 
@@ -402,6 +401,23 @@ export const TransactionProvider = ({ children }) => {
       setStatus("error");
     }
     setKcLoading(false);
+  };
+
+  //check if Sale is started
+  const IsSaleACtive = async () => {
+    try {
+      let provider = new ethers.providers.Web3Provider(window.ethereum);
+      let contract = new ethers.Contract(
+        MigrationContractAddress,
+        MigrationContractAbi,
+        provider
+      );
+      // Check if Sale has started
+      const migrationStarted = await contract.saleActive();
+      // code to check if Sale started is false
+      return migrationStarted;
+      // return !saleActive;
+    } catch (err) {}
   };
 
   //CLAIM F(X)
@@ -454,6 +470,7 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        IsSaleACtive,
         setChangeToken,
         busdBalance,
         bnbBalance,

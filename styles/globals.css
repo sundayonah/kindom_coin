@@ -134,6 +134,8 @@ hr {
   cursor: pointer;
 }
 
+
+
 /* Disabled button style */
 .disAble {
   padding: 0.8rem 2.5rem;
@@ -244,6 +246,7 @@ li {
   margin: 0 2rem;
 } */
 
+/* antd design */
 .ant-input {
   background-color: #1f2639 !important;
   color: white !important;
@@ -277,6 +280,14 @@ li {
   background-color: #0e111b !important;
 }
 
+.modalContent {
+  /* border-top: 1px solid #363e54; */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .ant-radio-group {
   margin-top: 10px;
 }
@@ -298,24 +309,21 @@ li {
 }
 
 .ant-modal-content {
-  background-color: #0e111b !important;
+  background-color: var(--background) !important;
   color: white !important;
   padding: 0px !important;
-}
-
-.modalContent {
-  /* padding-left: 1rem; */
+  font-size: 20px;
 }
 
 .ant-modal {
-  border: 1px solid #363e54;
+  border: 1px solid var(--border);
   width: 200px !important;
   border-radius: 10px;
   margin: 12rem 23rem;
 }
 
 .ant-modal-header {
-  background-color: #0e111b !important;
+  background-color: var(--background) !important;
 }
 
 .ant-modal-title {

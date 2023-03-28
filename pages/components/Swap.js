@@ -43,6 +43,7 @@ export default function MyComponent() {
     bnbBalance,
     busdBalance,
     setChangeToken,
+    IsSaleACtive,
   } = useContext(TransactionContext);
 
   // const tokens = [
@@ -63,6 +64,7 @@ export default function MyComponent() {
 
   const [check, setCheck] = useState(false);
   const [color, setColor] = useState("#ffffff");
+  const [isSale, setIsSale] = useState(false);
 
   function openModal(asset) {
     // setChangeToken(asset);
@@ -109,6 +111,19 @@ export default function MyComponent() {
   return (
     <>
       {contextHolder}
+
+      <Modal
+        open={isSale}
+        footer={null}
+        onCancel={() => setIsSale(false)}
+        title="Notice"
+        // set background color here
+      >
+        <div className="modalContent">
+          <p>Sale Has Ended.</p>
+        </div>
+      </Modal>
+
       <Modal
         open={isOpen}
         footer={null}
@@ -178,8 +193,8 @@ export default function MyComponent() {
                 onChange={handleV1Change}
               />
               <button
-                className={address ? "enable" : "disAble"}
-                // onClick={() => handleMaxChange(busdBalance)}
+                className={`button ${!address ? "disAble" : "enable"}`}
+                disabled={!address}
                 onClick={() =>
                   handleMaxChange(
                     tokenOne.ticker === "BUSD" ? busdBalance : bnbBalance
@@ -187,7 +202,9 @@ export default function MyComponent() {
                 }
               >
                 MAX
+                {/* {address ? "MAX" : "CONNECT WALLET"} */}
               </button>
+
               <button className="assetOne" onClick={() => openModal()}>
                 {/* Select Token */}
                 {tokenOne.ticker}
@@ -228,7 +245,17 @@ export default function MyComponent() {
                 )}
               </button>
             ) : (
-              <button className="claim buy" onClick={() => BuyKc()}>
+              <button
+                className="claim buy"
+                onClick={async () => {
+                  if (await IsSaleACtive()) {
+                    BuyKc();
+                  } else {
+                    setIsSale(true);
+                    console.log("sale not started yet");
+                  }
+                }}
+              >
                 {kcLoading ? (
                   <div className="spinnerbtn">
                     <ScaleLoader
@@ -270,11 +297,11 @@ export default function MyComponent() {
               >
                 {spinLoading ? (
                   <div className="spinnerbtn">
-                    <ClipLoader
+                    <ScaleLoader
                       color={color}
                       cssOverride={override}
                       loading={spinLoading}
-                      size={20}
+                      size={15}
                     />
                     {/* <p>Approve...</p> */}
                   </div>
@@ -284,9 +311,9 @@ export default function MyComponent() {
               </button>
             </div>
           </div>
-          <div className="aboutKingdom">
+          {/* <div className="aboutKingdom">
             <h1>ABOUT KINGDOM COIN</h1>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
