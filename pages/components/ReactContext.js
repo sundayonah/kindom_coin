@@ -344,6 +344,8 @@ export const TransactionProvider = ({ children }) => {
 
   // console.log(tokens,"tokens tokens")
 
+  let tx;
+
   ///BUYkc
   const BuyKc = async () => {
     setKcLoading(true);
@@ -362,7 +364,7 @@ export const TransactionProvider = ({ children }) => {
 
       if (tokenIn === BUSD) {
         console.log("Buying with BUSD...");
-        const tx = await contract.lockFund(BUSD, __amount, {
+        tx = await contract.lockFund(BUSD, __amount, {
           // value: ethers.BigNumber.from(__amount),
           gasLimit: 500000,
           gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
@@ -370,7 +372,7 @@ export const TransactionProvider = ({ children }) => {
       } else if (tokenIn === BNB) {
         console.log("Buying with BNB...");
         // buy KC with BNB
-        const tx = await contract.lockFund(BNB, __amount, {
+        tx = await contract.lockFund(BNB, __amount, {
           value: ethers.BigNumber.from(__amount),
           gasLimit: 500000,
           gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
@@ -380,20 +382,20 @@ export const TransactionProvider = ({ children }) => {
         return;
       }
 
-      // setV1("");
-      // setV2("");
-      // setSwitchButton(false);
+      setV1("");
+      setV2("");
+      setSwitchButton(false);
 
-      // const receipt = await tx.wait();
+      const receipt = await tx.wait();
 
-      // //   check if the transaction was successful
-      // if (receipt.status === 1) {
-      //   success();
-      //   setStatus("success");
-      // } else {
-      //   error();
-      //   setStatus("error");
-      // }
+      //   check if the transaction was successful
+      if (receipt.status === 1) {
+        success();
+        setStatus("success");
+      } else {
+        error();
+        setStatus("error");
+      }
     } catch (err) {
       console.error(err);
       error();
@@ -430,7 +432,6 @@ export const TransactionProvider = ({ children }) => {
         gasLimit: 500000,
         gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
       });
-
       // console.log(address, "Deposit successful!");
       const receipt = await tx.wait();
 
