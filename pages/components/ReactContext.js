@@ -43,7 +43,6 @@ export const TransactionProvider = ({ children }) => {
   const contractAddress = "0x79ff338CB4599740bC30B266714658Eed00A59aa";
   const bscAddress = "0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814";
   const address = useAddress();
-  // console.log(address, "user address ...,.,.,..,..,.,user");
 
   //message
   const [messageApi, contextHolder] = message.useMessage();
@@ -65,53 +64,11 @@ export const TransactionProvider = ({ children }) => {
 
     if (changeToken === 1) {
       setTokenTwo(tokens[i]);
-      console.log("yes");
     } else {
       setTokenOne(tokens[i]);
-      console.log("no");
     }
     setIsOpen(false);
   }
-
-  // const valueAmount = v1 && ethers.utils.parseUnits(v1.toString(), "ether");
-  // console.log(valueAmount, "valueAmountvalueAmountvalueAmount");
-
-  // function modifyToken(token) {
-  //   // if (token.name === "bnb") {
-  //   setTokenIn(BNB);
-  //   setPayableAmount(v1);
-  //   // } else {
-  //   //   setTokenIn(BUSD);
-  //   //   setBusdAmount(v1);
-  //   // }
-  //   setIsOpen(false);
-  // }
-
-  // async function modifyToken(token, i) {
-  //   if (token.name == "bnb") {
-  //     setTokenIn(BNB);
-  //     setPayableAmount(v1);
-  //     // setPayableAmount(ethers.utils.parseUnits(v1.toString(), "ether"));
-  //     console.log(BNB, "bnb ....");
-  //   } else {
-  //     setTokenIn(BUSD);
-  //     setBusdAmount(v1);
-  //     console.log(BUSD, "busd ....");
-
-  //     // setBusdAmount(ethers.utils.parseUnits(v1, "ether"));
-  //     // (ethers.utils.parseUnits(v1, "ether")); // (v1 * 10 ** 18).toString()
-  //   }
-  //   if (changeToken === BNB) {
-  //     setTokenOne(tokens[i]);
-  //     console.log("yes");
-  //   } else {
-  //     setTokenTwo(tokens[i]);
-  //     setBusdAmount(v1);
-
-  //     console.log("no");
-  //   }
-  //   setIsOpen(false);
-  // }
 
   //success f(x)
   const success = () => {
@@ -159,7 +116,6 @@ export const TransactionProvider = ({ children }) => {
         const etherAmountAsNumber = parseFloat(balance.toString());
         const roundedEtherAmount = etherAmountAsNumber.toFixed();
         setBusdBalance(roundedEtherAmount);
-        console.log(roundedEtherAmount, "format acc in BUSD");
       } catch (error) {
         console.error(error);
       }
@@ -167,9 +123,7 @@ export const TransactionProvider = ({ children }) => {
     busdBalance();
   }, [address]);
 
-  useEffect(() => {
-    console.log(payAbleAmount.toString(), "payable amount changed");
-  }, [payAbleAmount]);
+  useEffect(() => {}, [payAbleAmount]);
 
   const handleMaxChange = async (e) => {
     setV1(e);
@@ -199,7 +153,6 @@ export const TransactionProvider = ({ children }) => {
         const maxPrice = ethers.utils.formatUnits(max, "ether");
         const formattedPrice = maxPrice.toLocaleString();
         setKcPrice(formattedPrice);
-        // console.log(formattedPrice, "price price");
       } catch (error) {
         console.error(error);
       }
@@ -219,7 +172,6 @@ export const TransactionProvider = ({ children }) => {
         const minlock = ethers.utils.formatUnits(max, "ether");
         const formattedMinLock = minlock.toLocaleString();
         setMinLock(formattedMinLock);
-        // console.log(formattedMinLock, "formattedMinLock formattedMinLock");
       } catch (error) {
         console.error(error);
       }
@@ -239,7 +191,6 @@ export const TransactionProvider = ({ children }) => {
         const maxlock = ethers.utils.formatUnits(max, "ether");
         const formattedMaxLock = maxlock.toLocaleString();
         setMaxLock(formattedMaxLock);
-        // console.log(formattedMaxLock, "formattedMaxLock formattedMaxLock");
       } catch (error) {
         console.error(error);
       }
@@ -258,7 +209,6 @@ export const TransactionProvider = ({ children }) => {
         const fundLock = ethers.utils.formatUnits(max, "ether");
         const formattedLock = fundLock.toLocaleString();
         setLockFund(formattedLock);
-        // console.log(formattedLock, "formattedLock formattedLock");
       } catch (error) {
         console.error(error);
       }
@@ -290,12 +240,10 @@ export const TransactionProvider = ({ children }) => {
         //NEXT CLAIM TIME
         const max2 = max[4];
         const NextClaimTime = max2;
-        // console.log(max, max2, "formattedNextClaim");
 
         const ClaimTime = new Date(NextClaimTime * 1000);
         const formattedNextClaimTime = ClaimTime.toLocaleString();
         setNextClaimTime(formattedNextClaimTime);
-        // console.log(formattedNextClaimTime, "formattedNextClaimTime");
       } catch (error) {
         console.error(error);
       }
@@ -317,7 +265,6 @@ export const TransactionProvider = ({ children }) => {
 
       // setV1("");
       // setV2("");
-      console.log(tx, "TRANSACTION");
 
       const receipt = await tx.wait();
 
@@ -342,8 +289,6 @@ export const TransactionProvider = ({ children }) => {
     // setBusdAmount(v1);
   };
 
-  // console.log(tokens,"tokens tokens")
-
   let tx;
 
   ///BUYkc
@@ -356,20 +301,17 @@ export const TransactionProvider = ({ children }) => {
       const __amount = ethers.utils.parseUnits(v1, "ether");
 
       // const sale = await contract.saleActive();
-      // console.log(sale, "sale sale sale");
       // setIsSaleActive(sale);
 
       let tx; // declare tx outside the if-else block
 
       if (tokenIn === BUSD) {
-        console.log("Buying with BUSD...");
         tx = await contract.lockFund(BUSD, __amount, {
           // value: ethers.BigNumber.from(__amount),
           gasLimit: 500000,
           gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
         });
       } else if (tokenIn === BNB) {
-        console.log("Buying with BNB...");
         // buy KC with BNB
         tx = await contract.lockFund(BNB, __amount, {
           value: ethers.BigNumber.from(__amount),
@@ -377,7 +319,6 @@ export const TransactionProvider = ({ children }) => {
           gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
         });
       } else {
-        console.error("Invalid token address!");
         return;
       }
 
@@ -436,19 +377,15 @@ export const TransactionProvider = ({ children }) => {
       if (currentDateTime < nextClaimTimestamp) {
         // Disable the button
         setIsNextClaimDate(true);
-        console.log("Next claim date has not yet passed, button disabled.");
       } else {
         // Enable the button
         setIsNextClaimDate(false);
-        console.log("you can claim now .");
       }
-      console.log(nextClaimTimestamp, "nextClaimTimestampnextClaimTimestamp");
 
       const tx = await contract.claimKingdomCoin({
         gasLimit: 500000,
         gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
       });
-      // console.log(address, "Deposit successful!");
       const receipt = await tx.wait();
 
       //   check if the transaction was successful
