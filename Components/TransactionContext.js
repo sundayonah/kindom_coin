@@ -260,7 +260,7 @@ export const TransactionProvider = ({ children }) => {
       const profile = new ethers.Contract(bscAddress, bscAbi, signer);
       const value = ethers.utils.parseUnits(v1, "ether");
       const tx = await profile.approve(contractAddress, value, {
-        gasLimit: 61000,
+        gasLimit: 51000,
       });
 
       // setV1("");
