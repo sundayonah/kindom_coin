@@ -1,6 +1,6 @@
 import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
 import "../styles/globals.css";
-import { TransactionProvider } from "../TransactionContext";
+import { TransactionProvider } from "../Components/TransactionContext";
 
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.

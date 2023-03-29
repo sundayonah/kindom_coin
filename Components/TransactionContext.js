@@ -1,10 +1,10 @@
 import React, { createContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
-import routerAbi from "./pages/Components/contract/routerAbi.json";
-import bscAbi from "./pages/Components/contract/bscAbi.json";
+import routerAbi from "./contract/routerAbi.json";
+import bscAbi from "./contract/bscAbi.json";
 import { useAddress } from "@thirdweb-dev/react";
 import { Modal, message } from "antd";
-import tokens from "./pages/Components/tokenList.json";
+import tokens from "./tokenList.json";
 
 export const TransactionContext = createContext({});
 export const TransactionProvider = ({ children }) => {

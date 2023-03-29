@@ -6,7 +6,7 @@ import Logo from "/public/logo.png";
 import Bnb from "/public/bnb.png";
 import Busd from "/public/busd.png";
 import { Modal, message } from "antd";
-import { TransactionContext } from "../../TransactionContext";
+import { TransactionContext } from "./TransactionContext";
 import ClipLoader from "react-spinners/ClipLoader";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import routerAbi from "./contract/routerAbi.json";
