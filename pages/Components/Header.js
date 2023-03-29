@@ -1,6 +1,6 @@
 import styles from "../../styles/Home.module.css";
 import Image from "next/image";
-import Logo from "../components/images/logo.png";
+import Logo from "./images/logo.png";
 
 import { ConnectWallet } from "@thirdweb-dev/react";
 

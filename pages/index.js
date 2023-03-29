@@ -1,5 +1,5 @@
-import Header from "./components/Header";
-import Swap from "./components/Swap";
+import Header from "./Components/Header";
+import Swap from "./Components/Swap";
 
 export default function Home() {
   return (
