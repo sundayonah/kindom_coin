@@ -7,7 +7,7 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 const Header = () => {
   return (
     <div className={styles.connect}>
-      <Image src={Logo} alt="kingdom-Coin" width={100} height={100} />
+      <Image src={Logo} alt="kingdom-Coin" width={80} height={80} />
       <ConnectWallet colorMode="#daa851" btnTitle="Connect Wallet" />
     </div>
   );
