@@ -35,6 +35,7 @@ export const TransactionProvider = ({ children }) => {
   const [isNextClaimDate, setIsNextClaimDate] = useState(false);
   const [bnbBalance, setBnbBalance] = useState("");
   const [busdBalance, setBusdBalance] = useState("");
+  const [isSale, setIsSale] = useState(false);
 
   // const [selectedToken, setSelectedToken] = useState();
   // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
@@ -407,6 +408,8 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        isSale,
+        setIsSale,
         IsSaleACtive,
         setChangeToken,
         busdBalance,

@@ -14,6 +14,8 @@ import tokens from "./tokenList.json";
 
 export default function MyComponent() {
   const {
+    isSale,
+    setIsSale,
     handleClaim,
     spinLoading,
     contextHolder,
@@ -64,7 +66,6 @@ export default function MyComponent() {
 
   const [check, setCheck] = useState(false);
   const [color, setColor] = useState("#ffffff");
-  const [isSale, setIsSale] = useState(false);
 
   function openModal(asset) {
     // setChangeToken(asset);
@@ -182,7 +183,7 @@ export default function MyComponent() {
 
           <div className="formInput">
             <div className="youPay">
-              <h4>You Pay</h4>
+              <h4>Bal:</h4>
               <h4>{tokenOne.name === "busd" ? busdBalance : bnbBalance}</h4>
             </div>
             <div className="inputOut">
@@ -249,9 +250,9 @@ export default function MyComponent() {
                 className="claim buy"
                 onClick={async () => {
                   if (await IsSaleACtive()) {
-                    BuyKc();
-                  } else {
                     setIsSale(true);
+                  } else {
+                    BuyKc();
                   }
                 }}
               >
