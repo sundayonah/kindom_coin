@@ -1,3 +1,8 @@
+
+// This is a code snippet in JavaScript for initializing a decentralized application (dApp) using the Thirdweb framework.
+
+// The import statements at the top of the code are importing the necessary modules from the Thirdweb framework and the local stylesheet.
+
 import { ThirdwebProvider, ChainId } from "@thirdweb-dev/react";
 import "../styles/globals.css";
 import { TransactionProvider } from "../Components/TransactionContext";

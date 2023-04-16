@@ -1,3 +1,6 @@
+// The ConnectWallet component is from the Thirdweb framework and provides a button to connect a wallet.
+// It takes in two props: colorMode to set the color of the button and btnTitle to set the text displayed on the button.
+
 import styles from "/styles/Home.module.css";
 import Image from "next/image";
 import Logo from "/public/logo.png";

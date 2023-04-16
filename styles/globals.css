@@ -148,15 +148,16 @@ hr {
   align-items: center;
   font-size: 16px;
   padding: 10px 20px;
-  /* background-color: var(--button); */
   color: #fff;
   border-radius: 0rem 0.5rem 0.5rem 0rem;
+  /* background-color: var(--button); */
 }
 /* ................................................. */
 /* RIGHT WING */
 .rightWing {
   padding: 0.7rem;
 }
+
 .totalClaim {
   padding: 1rem;
   background-color: var(--background);
@@ -170,6 +171,7 @@ hr {
 .rightWing P {
   padding-bottom: 0.1rem;
 }
+
 .claimButton {
   display: flex;
   justify-content: center;
@@ -177,6 +179,7 @@ hr {
   margin-top: 1.5rem;
   /* margin-top: 2rem; */
 }
+
 .claim {
   padding: 0.8rem 6.5rem;
   border-radius: var(--radius);
@@ -194,9 +197,11 @@ p {
   font-size: 13px;
   font-weight: 500;
 }
+
 h3 {
   font-weight: 400;
 }
+
 h4 {
   color: var(--button);
   font-weight: bold;
@@ -207,6 +212,7 @@ a {
   /* color: #7dd3fc; */
   text-decoration: none;
 }
+
 li {
   list-style: none;
 }
@@ -315,6 +321,7 @@ li {
 .ant-modal-close-icon:hover {
   color: white !important;
 }
+
 .tokenLogo {
   height: 40px;
   width: 40px;

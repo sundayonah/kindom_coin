@@ -205,7 +205,6 @@ export default function MyComponent() {
                 MAX
                 {/* {address ? "MAX" : "CONNECT WALLET"} */}
               </button>
-
               <button className="assetOne" onClick={() => openModal()}>
                 {/* Select Token */}
                 {tokenOne.ticker}
@@ -290,10 +289,10 @@ export default function MyComponent() {
               <strong> {nextClaimTime}</strong>
             </div>
             <div className="claimButton">
-              <button
+              {/* <button
                 onClick={() => handleClaim()}
                 className={isNextClaimDate ? "disAble" : "claim"}
-                disabled={isNextClaimDate}
+                // disabled={isNextClaimDate}
               >
                 {spinLoading ? (
                   <div className="spinnerbtn">
@@ -303,7 +302,24 @@ export default function MyComponent() {
                       loading={spinLoading}
                       size={15}
                     />
-                    {/* <p>Approve...</p> */}
+                  </div>
+                ) : (
+                  "CLAIM"
+                )}
+              </button> */}
+              <button
+                onClick={() => handleClaim()}
+                className={isNextClaimDate ? "disable" : "claim"}
+                disabled={spinLoading || isNextClaimDate}
+              >
+                {spinLoading ? (
+                  <div className="spinnerbtn">
+                    <ScaleLoader
+                      color={color}
+                      cssOverride={override}
+                      loading={spinLoading}
+                      size={15}
+                    />
                   </div>
                 ) : (
                   "CLAIM"

@@ -94,7 +94,7 @@ export const TransactionProvider = ({ children }) => {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const bnbBalance = await provider.getBalance(address);
         setBnbBalance(
-          parseFloat(ethers.utils.formatEther(bnbBalance)).toFixed(3)
+          parseFloat(ethers.utils.formatEther(bnbBalance)).toFixed(5)
         );
       } catch (error) {
         console.error(error);
@@ -115,7 +115,7 @@ export const TransactionProvider = ({ children }) => {
         const bal = await profile.balanceOf(address);
         const balance = ethers.utils.formatEther(bal, "ether");
         const etherAmountAsNumber = parseFloat(balance.toString());
-        const roundedEtherAmount = etherAmountAsNumber.toFixed();
+        const roundedEtherAmount = etherAmountAsNumber.toFixed(3);
         setBusdBalance(roundedEtherAmount);
       } catch (error) {
         console.error(error);
@@ -245,6 +245,10 @@ export const TransactionProvider = ({ children }) => {
         const ClaimTime = new Date(NextClaimTime * 1000);
         const formattedNextClaimTime = ClaimTime.toLocaleString();
         setNextClaimTime(formattedNextClaimTime);
+        // console.log(
+        //   formattedNextClaimTime,
+        //   "formattedNextClaimTime formattedNextClaimTime"
+        // );
       } catch (error) {
         console.error(error);
       }
@@ -357,45 +361,87 @@ export const TransactionProvider = ({ children }) => {
       // Check if Sale has started
       const migrationStarted = await contract.saleActive();
       // code to check if Sale started is false
+      console.log(`migrationstated${migrationStarted}`);
       return migrationStarted;
       // return !saleActive;
     } catch (err) {}
   };
 
   //CLAIM F(X)
+  // const handleClaim = async () => {
+  //   setSpinLoading(true);
+  //   try {
+  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //     const signer = provider.getSigner();
+  //     const contract = new ethers.Contract(contractAddress, routerAbi, signer);
+  //     // const amount = ethers.utils.parseUnits("0.1", "gwei");
+
+  //     // Check if the "Next Claim Date" has passed
+  //     const now = new Date();
+  //     const currentDateTime = now.toLocaleString();
+  //     const nextClaimTimestamp = nextClaimTime;
+
+  //     if (currentDateTime < nextClaimTimestamp) {
+  //       // Disable the button
+  //       setIsNextClaimDate(true);
+  //       console.log(isNextClaimDate, "true");
+  //     } else {
+  //       // Enable the button
+  //       setIsNextClaimDate(false);
+  //       console.log(isNextClaimDate, "false");
+  //     }
+
+  //     const tx = await contract.claimKingdomCoin({
+  //       gasLimit: 500000,
+  //       gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+  //     });
+  //     const receipt = await tx.wait();
+
+  //     //   check if the transaction was successful
+  //     if (receipt.status === 1) {
+  //       success();
+  //       setStatus("success");
+  //     } else {
+  //       error();
+  //       setStatus("error");
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     error();
+  //     setStatus("error");
+  //   }
+  //   setSpinLoading(false);
+  // };
+
+  //SAMPLE CLAIM F(X)
+
   const handleClaim = async () => {
     setSpinLoading(true);
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(contractAddress, routerAbi, signer);
-      // const amount = ethers.utils.parseUnits("0.1", "gwei");
 
-      // Check if the "Next Claim Date" has passed
       const now = new Date();
-      const currentDateTime = now.toLocaleString();
-      const nextClaimTimestamp = nextClaimTime;
-      if (currentDateTime < nextClaimTimestamp) {
-        // Disable the button
-        setIsNextClaimDate(true);
-      } else {
-        // Enable the button
-        setIsNextClaimDate(false);
-      }
+      const nextClaimTimestamp = new Date(nextClaimTime);
 
-      const tx = await contract.claimKingdomCoin({
-        gasLimit: 500000,
-        gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
-      });
-      const receipt = await tx.wait();
-
-      //   check if the transaction was successful
-      if (receipt.status === 1) {
-        success();
-        setStatus("success");
+      if (now < nextClaimTimestamp) {
+        setIsNextClaimDate(true); // Disable the button
       } else {
-        error();
-        setStatus("error");
+        setIsNextClaimDate(false); // Enable the button
+        const tx = await contract.claimKingdomCoin({
+          gasLimit: 500000,
+          gasPrice: ethers.utils.parseUnits("10.0", "gwei"),
+        });
+        const receipt = await tx.wait();
+
+        if (receipt.status === 1) {
+          success();
+          setStatus("success");
+        } else {
+          error();
+          setStatus("error");
+        }
       }
     } catch (err) {
       console.error(err);
