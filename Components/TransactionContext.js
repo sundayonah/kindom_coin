@@ -42,8 +42,8 @@ export const TransactionProvider = ({ children }) => {
   // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
   // let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
 
-  const contractAddress = "0x3ac84aD10676B8592697A70509aD24B5e2eFCC22";
-  const bscAddress = "0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814";
+  const contractAddress = "0x40BB34d80d101C331dD4b9946dE6880D63d6B897";
+  const bscAddress = "0x10d26c359F3D9dd26DfF78a4Bbb7Dbb72E06E7a4";
   const address = useAddress();
 
   //message
