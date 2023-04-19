@@ -23,6 +23,7 @@ export const TransactionProvider = ({ children }) => {
   const [kcPrice, setKcPrice] = useState("");
   const [minLock, setMinLock] = useState("");
   const [maxLock, setMaxLock] = useState("");
+  const [expectedLock, setExpectedLock] = useState("");
   const [lockFund, setLockFund] = useState("");
   const [totalClaim, setTotalClaim] = useState("");
   const [nextClaimAmount, setNextClaimAmonut] = useState("");
@@ -199,6 +200,25 @@ export const TransactionProvider = ({ children }) => {
     MaxLockForEachUser();
   }, []);
 
+  //EXPECTEDLOCKEDFUND
+  useEffect(() => {
+    const ExpectedTotalLockfund = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        const max = await profile.expectedTotalLockFunds();
+        const expectedlock = ethers.utils.formatUnits(max, "ether");
+        const formattedExpectedLock = expectedlock.toLocaleString();
+        setExpectedLock(formattedExpectedLock);
+        console.log("formattedExpectedLock", max, formattedExpectedLock);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    ExpectedTotalLockfund();
+  }, []);
+
   //LOCKEDFUNDS
   useEffect(() => {
     const LockedFunds = async () => {
@@ -208,8 +228,8 @@ export const TransactionProvider = ({ children }) => {
         const profile = new ethers.Contract(contractAddress, routerAbi, signer);
         const max = await profile.lockedFunds();
         const fundLock = ethers.utils.formatUnits(max, "ether");
-        const formattedLock = fundLock.toLocaleString();
-        setLockFund(formattedLock);
+        const formattedLock = parseFloat(fundLock.toString());
+        setLockFund(formattedLock.toFixed(2));
       } catch (error) {
         console.error(error);
       }
@@ -235,8 +255,9 @@ export const TransactionProvider = ({ children }) => {
         //NEXT CLAIM
         const max1 = max[3];
         const NextClaim = ethers.utils.formatUnits(max1, "ether");
-        const formattedNextClaim = NextClaim.toLocaleString();
-        setNextClaimAmonut(formattedNextClaim);
+        const formattedNextClaim = parseFloat(NextClaim.toString());
+        setNextClaimAmonut(formattedNextClaim.toFixed());
+        console.log(formattedNextClaim.toFixed());
 
         //NEXT CLAIM TIME
         const max2 = max[4];
@@ -245,10 +266,6 @@ export const TransactionProvider = ({ children }) => {
         const ClaimTime = new Date(NextClaimTime * 1000);
         const formattedNextClaimTime = ClaimTime.toLocaleString();
         setNextClaimTime(formattedNextClaimTime);
-        // console.log(
-        //   formattedNextClaimTime,
-        //   "formattedNextClaimTime formattedNextClaimTime"
-        // );
       } catch (error) {
         console.error(error);
       }
@@ -454,6 +471,7 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        expectedLock,
         isSale,
         setIsSale,
         IsSaleACtive,

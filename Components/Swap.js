@@ -14,6 +14,7 @@ import tokens from "./tokenList.json";
 
 export default function MyComponent() {
   const {
+    expectedLock,
     isSale,
     setIsSale,
     handleClaim,
@@ -108,6 +109,8 @@ export default function MyComponent() {
     margin: "0 auto",
     borderColor: "red",
   };
+  const percentage = (lockFund / expectedLock) * 100;
+  const progressStyle = { width: `${percentage}%` };
 
   return (
     <>
@@ -273,6 +276,7 @@ export default function MyComponent() {
             )}
           </div>
         </div>
+
         <div className="rightWing">
           <div className="totalClaim">
             <h4>Kingdom Coin Claim</h4>
@@ -325,6 +329,19 @@ export default function MyComponent() {
                   "CLAIM"
                 )}
               </button>
+            </div>
+          </div>
+          <div>
+            <div className="progress">
+              <p>Lock Fund {lockFund}</p>
+              <p>Expected Lock {expectedLock}</p>
+            </div>
+            <div className="progress-bar">
+              <div className="progress-bar-fill" style={progressStyle}>
+                <span className="progress-bar-text">{`${percentage.toFixed(
+                  2
+                )}%`}</span>
+              </div>
             </div>
           </div>
           {/* <div className="aboutKingdom">
