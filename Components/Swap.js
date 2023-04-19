@@ -333,8 +333,12 @@ export default function MyComponent() {
           </div>
           <div>
             <div className="progress">
-              <p>Lock Fund {lockFund}</p>
-              <p>Expected Lock {expectedLock}</p>
+              <p>
+                Lock Fund: <small>{lockFund}</small>
+              </p>
+              <p>
+                Expected Lock: <small>{expectedLock}</small>
+              </p>
             </div>
             <div className="progress-bar">
               <div className="progress-bar-fill" style={progressStyle}>
