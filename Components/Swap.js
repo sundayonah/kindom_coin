@@ -348,9 +348,9 @@ export default function MyComponent() {
             </div>
             <div className="progress-bar">
               <div className="progress-bar-fill" style={progressStyle}>
-                <span className="progress-bar-text">{`${percentage.toFixed(
-                  2
-                )}%`}</span>
+                <span className="progress-bar-text">{`${
+                  isNaN(percentage) ? 0 : percentage.toFixed(2)
+                }%`}</span>
               </div>
             </div>
           </div>
