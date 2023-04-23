@@ -1,0 +1,12 @@
+[
+  {
+    "ticker": "BUSD",
+    "img": "/images/busd.png",
+    "name": "busd"
+  },
+  {
+    "ticker": "BNB",
+    "img": "/images/bnb.png",
+    "name": "bnb"
+  }
+]
