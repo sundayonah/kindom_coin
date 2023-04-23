@@ -112,6 +112,8 @@ export default function MyComponent() {
   const percentage = (lockFund / expectedLock) * 100;
   const progressStyle = { width: `${percentage}%` };
 
+  const tkc = "TKC";
+
   return (
     <>
       {contextHolder}
@@ -168,7 +170,9 @@ export default function MyComponent() {
           <h4>Buy King</h4>
           <div className="contentForText">
             <p>1 BUSD </p>
-            <strong>&nbsp;{kcPrice} KC</strong>
+            <strong>
+              &nbsp;{kcPrice} {tkc}
+            </strong>
           </div>
           <div className="contentForText">
             <p>Min</p>
@@ -225,7 +229,7 @@ export default function MyComponent() {
               <input readOnly placeholder="0.0" value={v2} />
               <span>
                 <Image src={Logo} alt="kingdon-Coin" width={30} height={25} />
-                KC
+                {tkc}
               </span>
             </div>
           </div>
@@ -282,7 +286,9 @@ export default function MyComponent() {
             <h4>Kingdom Coin Claim</h4>
             <div className="contentForText">
               <p>Total Claim</p>
-              <strong>{totalClaim} KC</strong>
+              <strong>
+                {totalClaim} {tkc}
+              </strong>
             </div>
             <div className="contentForText">
               <p>Next Claim Amount</p>
