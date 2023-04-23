@@ -152,9 +152,10 @@ export const TransactionProvider = ({ children }) => {
         const signer = provider.getSigner();
         const profile = new ethers.Contract(contractAddress, routerAbi, signer);
         const max = await profile.price();
-        const maxPrice = ethers.utils.formatUnits(max, "ether");
-        const formattedPrice = maxPrice.toLocaleString();
-        setKcPrice(formattedPrice);
+        const maxPrice = ethers.utils.formatEther(max, "ether");
+        const formattedPrice = parseFloat(maxPrice.toLocaleString());
+        const rounddedkcPrice = formattedPrice.toFixed(4);
+        setKcPrice(rounddedkcPrice);
       } catch (error) {
         console.error(error);
       }
@@ -211,7 +212,6 @@ export const TransactionProvider = ({ children }) => {
         const expectedlock = ethers.utils.formatUnits(max, "ether");
         const formattedExpectedLock = expectedlock.toLocaleString();
         setExpectedLock(formattedExpectedLock);
-        console.log("formattedExpectedLock", max, formattedExpectedLock);
       } catch (error) {
         console.error(error);
       }
@@ -257,15 +257,28 @@ export const TransactionProvider = ({ children }) => {
         const NextClaim = ethers.utils.formatUnits(max1, "ether");
         const formattedNextClaim = parseFloat(NextClaim.toString());
         setNextClaimAmonut(formattedNextClaim.toFixed());
-        console.log(formattedNextClaim.toFixed());
 
-        //NEXT CLAIM TIME
+        const UnixEpoch = "1/1/1970, 1:00:00 AM";
+
+        // NEXT CLAIM TIME
         const max2 = max[4];
         const NextClaimTime = max2;
+        // console.log(NextClaimTime);
 
+        //real Claim Time
         const ClaimTime = new Date(NextClaimTime * 1000);
         const formattedNextClaimTime = ClaimTime.toLocaleString();
-        setNextClaimTime(formattedNextClaimTime);
+
+        //comparing real claim time
+        const timeZero = new Date(NextClaimTime * 1000);
+        const setTimeToZero = timeZero.toLocaleString();
+
+        //check if formattedNextClaimTime === setTimeToZero
+        if (formattedNextClaimTime === setTimeToZero) {
+          setNextClaimTime("0");
+        } else {
+          setNextClaimTime(formattedNextClaimTime);
+        }
       } catch (error) {
         console.error(error);
       }
