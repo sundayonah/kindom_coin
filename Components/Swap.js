@@ -167,7 +167,7 @@ export default function MyComponent() {
         <div className="leftWing">
           {/* <Image src={Bnb} width={15} hieght={15} alt="bnb" />
           <Image src={Busd} width={15} hieght={15} alt="bnb" /> */}
-          <h4>Buy King</h4>
+          <h4>Buy Kingdom Coin</h4>
           <div className="contentForText">
             <p>1 BUSD </p>
             <strong>

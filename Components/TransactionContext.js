@@ -263,7 +263,6 @@ export const TransactionProvider = ({ children }) => {
         // NEXT CLAIM TIME
         const max2 = max[4];
         const NextClaimTime = max2;
-        // console.log(NextClaimTime);
 
         //real Claim Time
         const ClaimTime = new Date(NextClaimTime * 1000);
@@ -391,7 +390,6 @@ export const TransactionProvider = ({ children }) => {
       // Check if Sale has started
       const migrationStarted = await contract.saleActive();
       // code to check if Sale started is false
-      console.log(`migrationstated${migrationStarted}`);
       return migrationStarted;
       // return !saleActive;
     } catch (err) {}
