@@ -135,7 +135,7 @@ export const TransactionProvider = ({ children }) => {
   const handleV1Change = async (e) => {
     setV1(e.target.value);
     // const value = ethers.utils.parseUnits(e.target.value.toString(), "ether");
-    const outputAmount = e.target.value * 0.0114583333;
+    const outputAmount = e.target.value / 0.0114583333;
     setV2(outputAmount);
   };
 
