@@ -140,8 +140,9 @@ export const TransactionProvider = ({ children }) => {
     // const value = ethers.utils.parseUnits(e.target.value.toString(), "ether");
     const outputAmount = e.target.value / 0.0114583333;
     setV2(outputAmount);
-    if (tokenIn) {
-    } else {
+    if (tokenIn == BNB) {
+      const outputAmountInBnb = e.target.value * 28800.00008378182;
+      setV2(outputAmountInBnb);
     }
   };
 
