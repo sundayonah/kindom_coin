@@ -135,7 +135,7 @@ export const TransactionProvider = ({ children }) => {
   const handleV1Change = async (e) => {
     setV1(e.target.value);
     // const value = ethers.utils.parseUnits(e.target.value.toString(), "ether");
-    const outputAmount = e.target.value * 0.065;
+    const outputAmount = e.target.value * 0.0114583333;
     setV2(outputAmount);
   };
 
@@ -154,7 +154,7 @@ export const TransactionProvider = ({ children }) => {
         const max = await profile.price();
         const maxPrice = ethers.utils.formatEther(max, "ether");
         const formattedPrice = parseFloat(maxPrice.toLocaleString());
-        const rounddedkcPrice = formattedPrice.toFixed(4);
+        const rounddedkcPrice = formattedPrice.toFixed(6);
         setKcPrice(rounddedkcPrice);
       } catch (error) {
         console.error(error);
