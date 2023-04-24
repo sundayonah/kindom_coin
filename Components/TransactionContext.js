@@ -9,7 +9,7 @@ import tokens from "./tokenList.json";
 export const TransactionContext = createContext({});
 export const TransactionProvider = ({ children }) => {
   let BUSD = "0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814";
-  let BNB = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+  let BNB = "0x0000000000000000000000000000000000000000";
   // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
 
   const [changeToken, setChangeToken] = useState(BUSD);
