@@ -42,7 +42,7 @@ export const TransactionProvider = ({ children }) => {
   // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
   // let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
 
-  const contractAddress = "0x2091fB7E6CFBb75B5652DC693914BB23833F4cE3";
+  const contractAddress = "0x322A9Da5A46BC36A5C20d6D88FD1A27e1263C7ec";
   const bscAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
   const address = useAddress();
 
@@ -156,7 +156,6 @@ export const TransactionProvider = ({ children }) => {
         const formattedPrice = parseFloat(maxPrice.toLocaleString());
         // const rounddedkcPrice = formattedPrice.toFixed(6);
         setKcPrice(formattedPrice);
-        console.log(formattedPrice);
       } catch (error) {
         console.error(error);
       }
