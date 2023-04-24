@@ -154,8 +154,9 @@ export const TransactionProvider = ({ children }) => {
         const max = await profile.price();
         const maxPrice = ethers.utils.formatEther(max, "ether");
         const formattedPrice = parseFloat(maxPrice.toLocaleString());
-        const rounddedkcPrice = formattedPrice.toFixed(6);
-        setKcPrice(rounddedkcPrice);
+        // const rounddedkcPrice = formattedPrice.toFixed(6);
+        setKcPrice(formattedPrice);
+        console.log(formattedPrice);
       } catch (error) {
         console.error(error);
       }
