@@ -9,7 +9,8 @@ import tokens from "./tokenList.json";
 export const TransactionContext = createContext({});
 export const TransactionProvider = ({ children }) => {
   let BUSD = "0xaB1a4d4f1D656d2450692D237fdD6C7f9146e814";
-  let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
+  let BNB = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+  // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
 
   const [changeToken, setChangeToken] = useState(BUSD);
   const [tokenOne, setTokenOne] = useState(tokens[0]);
@@ -52,6 +53,8 @@ export const TransactionProvider = ({ children }) => {
   const [tokenIn, setTokenIn] = useState(BUSD);
   const [payAbleAmount, setPayableAmount] = useState(v1);
   const [busdAmount, setBusdAmount] = useState("");
+
+  const payAmount = "";
 
   async function modifyToken(token, i) {
     if (token.name === "bnb") {
@@ -137,6 +140,9 @@ export const TransactionProvider = ({ children }) => {
     // const value = ethers.utils.parseUnits(e.target.value.toString(), "ether");
     const outputAmount = e.target.value / 0.0114583333;
     setV2(outputAmount);
+    if (tokenIn) {
+    } else {
+    }
   };
 
   // function handleV1Change(event) {
