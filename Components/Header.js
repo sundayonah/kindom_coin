@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <div className={styles.connect}>
       <Image src={Logo} alt="kingdom-Coin" width={80} height={80} />
-      <ConnectWallet colorMode="#daa851" btnTitle="Connect Wallet" />
+      <ConnectWallet background-color="#daa851" btnTitle="Connect Wallet" />
     </div>
   );
 };

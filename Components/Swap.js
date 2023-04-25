@@ -5,7 +5,7 @@ import Image from "next/image";
 import Logo from "/public/logo.png";
 import Bnb from "/public/bnb.png";
 import Busd from "/public/busd.png";
-import { Modal, message } from "antd";
+import { Modal, Button, Popover, message } from "antd";
 import { TransactionContext } from "./TransactionContext";
 import ClipLoader from "react-spinners/ClipLoader";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -113,6 +113,13 @@ export default function MyComponent() {
   const progressStyle = { width: `${percentage}%` };
 
   const tkc = "TKC";
+
+  // const content = (
+  //   <div>
+  //     <p>Content</p>
+  //     <p>Content</p>
+  //   </div>
+  // );
 
   return (
     <>
@@ -281,6 +288,10 @@ export default function MyComponent() {
           </div>
         </div>
 
+        {/* <Popover content={content} title="Title">
+          <Button type="primary">C</Button>
+        </Popover> */}
+
         <div className="rightWing">
           <div className="totalClaim">
             <h4>Kingdom Coin Claim</h4>
@@ -319,7 +330,7 @@ export default function MyComponent() {
               </button> */}
               <button
                 onClick={() => handleClaim()}
-                className={isNextClaimDate ? "disable" : "claim"}
+                className={isNextClaimDate ? "disAble" : "claim"}
                 disabled={spinLoading || isNextClaimDate}
               >
                 {spinLoading ? (
@@ -340,10 +351,10 @@ export default function MyComponent() {
           <div>
             <div className="progress">
               <p>
-                Lock Fund: <small>{lockFund}</small>
+                Lock Fund: <small>$ {lockFund}</small>
               </p>
               <p>
-                Expected Lock: <small>{expectedLock}</small>
+                Expected Lock: <small>$ {expectedLock}</small>
               </p>
             </div>
             <div className="progress-bar">

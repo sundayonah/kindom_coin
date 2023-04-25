@@ -34,7 +34,7 @@ export const TransactionProvider = ({ children }) => {
   const [kcLoading, setKcLoading] = useState(false);
   const [switchButton, setSwitchButton] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [isNextClaimDate, setIsNextClaimDate] = useState(false);
+  const [isNextClaimDate, setIsNextClaimDate] = useState(true);
   const [bnbBalance, setBnbBalance] = useState("");
   const [busdBalance, setBusdBalance] = useState("");
   const [isSale, setIsSale] = useState(false);
@@ -95,7 +95,10 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
         const bnbBalance = await provider.getBalance(address);
         setBnbBalance(
           parseFloat(ethers.utils.formatEther(bnbBalance)).toFixed(5)
@@ -113,9 +116,12 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const busdBalance = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const profile = new ethers.Contract(bscAddress, bscAbi, signer);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+        // const signer = provider.getSigner();
+        const profile = new ethers.Contract(bscAddress, bscAbi, provider);
         const bal = await profile.balanceOf(address);
         const balance = ethers.utils.formatEther(bal, "ether");
         const etherAmountAsNumber = parseFloat(balance.toString());
@@ -175,9 +181,17 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const MinLockForEachUser = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+
+        // const signer = provider.getSigner();
+        const profile = new ethers.Contract(
+          contractAddress,
+          routerAbi,
+          provider
+        );
         const max = await profile.minLockForEachUser();
         const minlock = ethers.utils.formatUnits(max, "ether");
         const formattedMinLock = minlock.toLocaleString();
@@ -194,9 +208,16 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const MaxLockForEachUser = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+        // const signer = provider.getSigner();
+        const profile = new ethers.Contract(
+          contractAddress,
+          routerAbi,
+          provider
+        );
         const max = await profile.maxLockForEachUser();
         const maxlock = ethers.utils.formatUnits(max, "ether");
         const formattedMaxLock = maxlock.toLocaleString();
@@ -212,9 +233,16 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const ExpectedTotalLockfund = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+        // const signer = provider.getSigner();
+        const profile = new ethers.Contract(
+          contractAddress,
+          routerAbi,
+          provider
+        );
         const max = await profile.expectedTotalLockFunds();
         const expectedlock = ethers.utils.formatUnits(max, "ether");
         const formattedExpectedLock = expectedlock.toLocaleString();
@@ -230,9 +258,16 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const LockedFunds = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+        // const signer = provider.getSigner();
+        const profile = new ethers.Contract(
+          contractAddress,
+          routerAbi,
+          provider
+        );
         const max = await profile.lockedFunds();
         const fundLock = ethers.utils.formatUnits(max, "ether");
         const formattedLock = parseFloat(fundLock.toString());
@@ -248,9 +283,16 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const UserStorage = async () => {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+        // const signer = provider.getSigner();
+        const profile = new ethers.Contract(
+          contractAddress,
+          routerAbi,
+          provider
+        );
         const max = await profile.userStorage(address);
 
         //TOTAL CLAIM
@@ -459,6 +501,8 @@ export const TransactionProvider = ({ children }) => {
 
       const now = new Date();
       const nextClaimTimestamp = new Date(nextClaimTime);
+      console.log(now);
+      console.log(nextClaimTimestamp);
 
       if (now < nextClaimTimestamp) {
         setIsNextClaimDate(true); // Disable the button
