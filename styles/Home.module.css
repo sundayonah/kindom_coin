@@ -7,6 +7,20 @@
   gap: 11rem;
 }
 
+/* button[disabled]:hover::before {
+  content: attr(title);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px;
+  background-color: #000;
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+} */
+
+
 /* MAIN START */
 .modal {
   position: fixed;

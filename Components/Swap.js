@@ -319,8 +319,9 @@ export default function MyComponent() {
               </button> */}
               <button
                 onClick={() => handleClaim()}
-                className={isNextClaimDate ? "disable" : "claim"}
+                className={isNextClaimDate ? "disAble" : "claim"}
                 disabled={spinLoading || isNextClaimDate}
+                title={isNextClaimDate ? "Claim start after private sale." : ""}
               >
                 {spinLoading ? (
                   <div className="spinnerbtn">
@@ -340,10 +341,10 @@ export default function MyComponent() {
           <div>
             <div className="progress">
               <p>
-                Lock Fund: <small>{lockFund}</small>
+                Lock Fund: $<small>{lockFund}</small>
               </p>
               <p>
-                Expected Lock: <small>{expectedLock}</small>
+                Expected Lock: $<small>{expectedLock}</small>
               </p>
             </div>
             <div className="progress-bar">
