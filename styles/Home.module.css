@@ -81,3 +81,13 @@
 }
 
 /* MAIN END */
+@media (max-width: 500px) {
+  .connect {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 4rem;
+    /* align-items: flex; */
+    /* background-color: #a31414; */
+  }
+}

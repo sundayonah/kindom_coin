@@ -38,6 +38,8 @@ export const TransactionProvider = ({ children }) => {
   const [bnbBalance, setBnbBalance] = useState("");
   const [busdBalance, setBusdBalance] = useState("");
   const [isSale, setIsSale] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState(false);
+  const [subAccount, setSubAccount] = useState("");
 
   // const [selectedToken, setSelectedToken] = useState();
   // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
@@ -55,6 +57,41 @@ export const TransactionProvider = ({ children }) => {
   const [busdAmount, setBusdAmount] = useState("");
 
   const payAmount = "";
+
+  const connectWallet = async () => {
+    // Check if MetaMask is installed
+    if (typeof window.ethereum === "undefined") {
+      // Handle the case where MetaMask is not installed
+      alert("Please install MetaMask to use this feature:");
+      return;
+    }
+
+    try {
+      // Request account access
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      // Set up listener for account change
+      window.ethereum.on("accountsChanged", (newAccounts) => {
+        // Refresh the page
+        window.location.reload();
+      });
+
+      // Save account details to local storage
+      localStorage.setItem("connectedAccount", accounts[0]);
+
+      const loggedAccount = accounts[0];
+      const currentAccount = `${accounts[0].substr(
+        0,
+        4
+      )}...${accounts[0].substr(-4)}`;
+      setCurrentAccount(loggedAccount);
+      setSubAccount(currentAccount);
+
+      console.log(loggedAccount);
+    } catch (err) {}
+  };
 
   async function modifyToken(token, i) {
     if (token.name === "bnb") {
@@ -99,7 +136,7 @@ export const TransactionProvider = ({ children }) => {
           "https://bsc-dataseed1.binance.org/"
         );
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const bnbBalance = await provider.getBalance(address);
+        const bnbBalance = await provider.getBalance(currentAccount);
         setBnbBalance(
           parseFloat(ethers.utils.formatEther(bnbBalance)).toFixed(5)
         );
@@ -107,10 +144,10 @@ export const TransactionProvider = ({ children }) => {
         console.error(error);
       }
     };
-    if (address) {
+    if (currentAccount) {
       fetchBalance();
     }
-  }, [address]);
+  }, [currentAccount]);
 
   //GET BALLANCE IN BUSD
   useEffect(() => {
@@ -122,7 +159,7 @@ export const TransactionProvider = ({ children }) => {
         );
         // const signer = provider.getSigner();
         const profile = new ethers.Contract(bscAddress, bscAbi, provider);
-        const bal = await profile.balanceOf(address);
+        const bal = await profile.balanceOf(currentAccount);
         const balance = ethers.utils.formatEther(bal, "ether");
         const etherAmountAsNumber = parseFloat(balance.toString());
         const roundedEtherAmount = etherAmountAsNumber.toFixed(3);
@@ -132,7 +169,7 @@ export const TransactionProvider = ({ children }) => {
       }
     };
     busdBalance();
-  }, [address]);
+  }, [currentAccount]);
 
   useEffect(() => {}, [payAbleAmount]);
 
@@ -293,13 +330,15 @@ export const TransactionProvider = ({ children }) => {
           routerAbi,
           provider
         );
-        const max = await profile.userStorage(address);
+        const max = await profile.userStorage(currentAccount);
 
         //TOTAL CLAIM
         const max0 = max[0];
         const TotalClaim = ethers.utils.formatUnits(max0, "ether");
         const formattedTotalClaim = TotalClaim.toLocaleString();
         setTotalClaim(formattedTotalClaim);
+
+        console.log(formattedTotalClaim);
 
         //NEXT CLAIM
         const max1 = max[3];
@@ -332,7 +371,7 @@ export const TransactionProvider = ({ children }) => {
       }
     };
     UserStorage();
-  }, [address]);
+  }, [currentAccount]);
 
   //Approve f(x)
   const Approved = async () => {
@@ -533,6 +572,9 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        subAccount,
+        currentAccount,
+        connectWallet,
         expectedLock,
         isSale,
         setIsSale,

@@ -14,6 +14,8 @@ import tokens from "./tokenList.json";
 
 export default function MyComponent() {
   const {
+    currentAccount,
+    connectWallet,
     expectedLock,
     isSale,
     setIsSale,
@@ -176,7 +178,7 @@ export default function MyComponent() {
           <Image src={Busd} width={15} hieght={15} alt="bnb" /> */}
           <h4>Buy Kingdom Coin</h4>
           <div className="contentForText">
-            <p>1 BUSD </p>
+            <p>1 BUSD1 </p>
             <strong>
               &nbsp;{kcPrice} {tkc}
             </strong>
@@ -208,8 +210,8 @@ export default function MyComponent() {
                 onChange={handleV1Change}
               />
               <button
-                className={`button ${!address ? "disAble" : "enable"}`}
-                disabled={!address}
+                className={`button ${!currentAccount ? "disAble" : "enable"}`}
+                disabled={!currentAccount}
                 onClick={() =>
                   handleMaxChange(
                     tokenOne.ticker === "BUSD" ? busdBalance : bnbBalance
@@ -328,6 +330,7 @@ export default function MyComponent() {
                   "CLAIM"
                 )}
               </button> */}
+
               <button
                 onClick={() => handleClaim()}
                 className={isNextClaimDate ? "disAble" : "claim"}
