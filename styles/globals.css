@@ -213,7 +213,8 @@ button:disabled {
   outline: none;
   cursor: pointer;
   color: #ffffff;
-  background-color: #daa851;
+  background-color: gray;
+  /* background-color: #daa851; */
 }
 /* .buy {
   margin-top: 1.5rem;
