@@ -7,6 +7,9 @@ import Logo from "/public/logo.png";
 
 import { ConnectWallet } from "@thirdweb-dev/react";
 
+
+
+
 const Header = () => {
   return (
     <div className={styles.connect}>

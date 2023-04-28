@@ -254,20 +254,23 @@ export default function MyComponent() {
             ) : (
               <button
                 className="claim buy"
-                onClick={async () => {
-                  if (await IsSaleACtive()) {
-                    setIsSale(true);
-                  } else {
-                    BuyKc();
-                  }
-                }}
+                // onClick={async () => {
+                //   if (await IsSaleACtive()) {
+                //     setIsSale(true);
+                //   } else {
+                //     BuyKc();
+                //   }
+                // }}
+                title={isNextClaimDate ? "Presail Close." : ""}
+                disabled={kcLoading} // Add the disabled attribute based on kcLoading state
               >
                 {kcLoading ? (
                   <div className="spinnerbtn">
                     <ScaleLoader
                       color={color}
                       cssOverride={overrideScale}
-                      loading={kcLoading}
+                      loading={!kcLoading}
+                      // disable kcLoading and comment buyKc function
                       size={15}
                       speedMultiplier={0.9}
                     />

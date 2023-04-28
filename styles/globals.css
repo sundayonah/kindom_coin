@@ -131,6 +131,11 @@ hr {
   font-size: 12px;
   white-space: nowrap;
 }
+button:disabled {
+  background-color: gray;
+  color: white;
+  cursor: not-allowed;
+}
 
 /* Disabled button style */
 .disAble {
