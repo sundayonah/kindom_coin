@@ -38,6 +38,7 @@ export const TransactionProvider = ({ children }) => {
   const [bnbBalance, setBnbBalance] = useState("");
   const [busdBalance, setBusdBalance] = useState("");
   const [isSale, setIsSale] = useState(false);
+  const [amountInPrice, setAmountInPrice] = useState("");
 
   // const [selectedToken, setSelectedToken] = useState();
   // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
@@ -302,16 +303,23 @@ export const TransactionProvider = ({ children }) => {
         setTotalClaim(formattedTotalClaim);
 
         //NEXT CLAIM
-        const max1 = max[3];
-        const NextClaim = ethers.utils.formatUnits(max1, "ether");
+        const max2 = max[2];
+        const AmountInPrice = ethers.utils.formatUnits(max2, "ether");
+        const formattedAmountInPrice = parseFloat(AmountInPrice.toString());
+        setAmountInPrice(formattedAmountInPrice.toFixed());
+        console.log(formattedAmountInPrice, "formattedAmountInPrice");
+
+        //NEXT CLAIM
+        const max3 = max[3];
+        const NextClaim = ethers.utils.formatUnits(max3, "ether");
         const formattedNextClaim = parseFloat(NextClaim.toString());
         setNextClaimAmonut(formattedNextClaim.toFixed());
 
         const UnixEpoch = "1/1/1970, 1:00:00 AM";
 
         // NEXT CLAIM TIME
-        const max2 = max[4];
-        const NextClaimTime = max2;
+        const max4 = max[4];
+        const NextClaimTime = max4;
 
         //real Claim Time
         const ClaimTime = new Date(NextClaimTime * 1000);
@@ -533,6 +541,7 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        amountInPrice,
         expectedLock,
         isSale,
         setIsSale,

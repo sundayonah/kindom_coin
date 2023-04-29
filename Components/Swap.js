@@ -14,6 +14,7 @@ import tokens from "./tokenList.json";
 
 export default function MyComponent() {
   const {
+    amountInPrice,
     expectedLock,
     isSale,
     setIsSale,
@@ -287,6 +288,12 @@ export default function MyComponent() {
         <div className="rightWing">
           <div className="totalClaim">
             <h4>Kingdom Coin Claim</h4>
+            <div className="contentForText">
+              <p>Amount In Price</p>
+              <strong>
+                {amountInPrice} {tkc}
+              </strong>
+            </div>
             <div className="contentForText">
               <p>Total Claim</p>
               <strong>
