@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import routerAbi from "./contract/routerAbi.json";
 import bscAbi from "./contract/bscAbi.json";
+import theKingdomAbi from "./contract/theKingdomAbi.json";
 import { useAddress } from "@thirdweb-dev/react";
 import { Modal, message } from "antd";
 import tokens from "./tokenList.json";
@@ -39,12 +40,14 @@ export const TransactionProvider = ({ children }) => {
   const [busdBalance, setBusdBalance] = useState("");
   const [isSale, setIsSale] = useState(false);
   const [amountInPrice, setAmountInPrice] = useState("");
+  // const [getAmountInPrice, setGetAmountInPrice] = useState()
 
   // const [selectedToken, setSelectedToken] = useState();
   // let BNB = "0xae13d989dac2f0debff460ac112a837c89baa7cd";
   // let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
 
   const contractAddress = "0xd6243011626ac6765Cb398B9Ed7cbEAbE7c5Ee19";
+  const newTKContractAddress = "0x7bA90e38327A4B82D8BF6B481C1b2Ed14228E91A";
   const bscAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
   const address = useAddress();
 
@@ -290,35 +293,51 @@ export const TransactionProvider = ({ children }) => {
         );
         // const signer = provider.getSigner();
         const profile = new ethers.Contract(
-          contractAddress,
-          routerAbi,
+          newTKContractAddress,
+          theKingdomAbi,
           provider
         );
         const max = await profile.userStorage(address);
 
-        //TOTAL CLAIM
+        // amount in price = getSumWithdrawableAmount(address) ✅
+        // const userStore = userStorage(address) ✅
+        // total claim = userStore[0]; ✅
+        // next claim amount = amount in price / 4 ✅
+        // next claim time = userStore[2] ✅
+
+        //GetAmountInPrice
+        const getAmount = await profile.getSumWithdrawableAmount(address);
+        const fundLock = ethers.utils.formatUnits(getAmount, "ether");
+        const formattedLock = parseFloat(fundLock.toString());
+        setAmountInPrice(formattedLock.toFixed(2));
+        console.log(amountInPrice, "amountInPrice");
+
+        // TOTAL CLAIM
         const max0 = max[0];
         const TotalClaim = ethers.utils.formatUnits(max0, "ether");
         const formattedTotalClaim = TotalClaim.toLocaleString();
         setTotalClaim(formattedTotalClaim);
 
-        //NEXT CLAIM
-        const max2 = max[2];
-        const AmountInPrice = ethers.utils.formatUnits(max2, "ether");
-        const formattedAmountInPrice = parseFloat(AmountInPrice.toString());
-        setAmountInPrice(formattedAmountInPrice.toFixed());
-        console.log(formattedAmountInPrice, "formattedAmountInPrice");
+        // next claim amount = amount in price / 4
+        let priceAmount = amountInPrice / 4;
+        setNextClaimAmonut(priceAmount);
 
-        //NEXT CLAIM
-        const max3 = max[3];
-        const NextClaim = ethers.utils.formatUnits(max3, "ether");
-        const formattedNextClaim = parseFloat(NextClaim.toString());
-        setNextClaimAmonut(formattedNextClaim.toFixed());
+        // const max2 = max[2];
+        // const AmountInPrice = ethers.utils.formatUnits(max2, "ether");
+        // const formattedAmountInPrice = parseFloat(AmountInPrice.toString());
+        // setAmountInPrice(formattedAmountInPrice.toFixed());
+        // console.log(formattedAmountInPrice, "formattedAmountInPrice");
+
+        // //NEXT CLAIM
+        // const max3 = max[3];
+        // const NextClaim = ethers.utils.formatUnits(max3, "ether");
+        // const formattedNextClaim = parseFloat(NextClaim.toString());
+        // setNextClaimAmonut(formattedNextClaim.toFixed());
 
         const UnixEpoch = "1/1/1970, 1:00:00 AM";
 
         // NEXT CLAIM TIME
-        const max4 = max[4];
+        const max4 = max[2];
         const NextClaimTime = max4;
 
         //real Claim Time
@@ -340,7 +359,7 @@ export const TransactionProvider = ({ children }) => {
       }
     };
     UserStorage();
-  }, [address]);
+  }, [address, amountInPrice]);
 
   //Approve f(x)
   const Approved = async () => {
