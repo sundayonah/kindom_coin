@@ -310,7 +310,6 @@ export const TransactionProvider = ({ children }) => {
         const fundLock = ethers.utils.formatUnits(getAmount, "ether");
         const formattedLock = parseFloat(fundLock.toString());
         setAmountInPrice(formattedLock.toFixed(2));
-        console.log(amountInPrice, "amountInPrice");
 
         // TOTAL CLAIM
         const max0 = max[0];
