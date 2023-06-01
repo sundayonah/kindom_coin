@@ -523,7 +523,11 @@ export const TransactionProvider = ({ children }) => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, routerAbi, signer);
+      const contract = new ethers.Contract(
+        newTKContractAddress,
+        routerAbi,
+        signer
+      );
 
       const now = new Date();
       const nextClaimTimestamp = new Date(nextClaimTime);
