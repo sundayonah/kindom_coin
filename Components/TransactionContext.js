@@ -524,7 +524,7 @@ export const TransactionProvider = ({ children }) => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
-        newTKContractAddress,
+        "0x973B83eee65fBf059344c9989499F3Edb9f4ADF4",
         routerAbi,
         signer
       );
