@@ -236,7 +236,12 @@ export default function MyComponent() {
           </div>
           <div className="claimButton">
             {switchButton && tokenOne.name !== "bnb" ? (
-              <button className="claim buy" onClick={() => Approved()}>
+              <button
+                // className="claim buy"
+                className={!isNextClaimDate ? "disAble" : "claim"}
+                onClick={() => Approved()}
+                title={"Sales Ended."}
+              >
                 {isLoading ? (
                   <div className="spinnerbtn">
                     <ScaleLoader
