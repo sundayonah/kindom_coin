@@ -47,7 +47,7 @@ export const TransactionProvider = ({ children }) => {
   // let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
 
   const contractAddress = "0xd6243011626ac6765Cb398B9Ed7cbEAbE7c5Ee19";
-  const newTKContractAddress = "0x7bA90e38327A4B82D8BF6B481C1b2Ed14228E91A";
+  const newTKContractAddress = "0xe3a85ee627538aE4a16243E5534426866525BB37";
   const bscAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
   const address = useAddress();
 
@@ -309,7 +309,7 @@ export const TransactionProvider = ({ children }) => {
         const getAmount = await profile.getSumWithdrawableAmount(address);
         const fundLock = ethers.utils.formatUnits(getAmount, "ether");
         const formattedLock = parseFloat(fundLock.toString());
-        setAmountInPrice(formattedLock.toFixed(2));
+        setAmountInPrice(formattedLock.toFixed(3));
 
         // TOTAL CLAIM
         const max0 = max[0];
