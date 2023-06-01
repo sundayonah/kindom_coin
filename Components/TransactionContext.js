@@ -527,8 +527,6 @@ export const TransactionProvider = ({ children }) => {
 
       const now = new Date();
       const nextClaimTimestamp = new Date(nextClaimTime);
-      console.log(now);
-      console.log(nextClaimTimestamp);
 
       if (now < nextClaimTimestamp) {
         setIsNextClaimDate(true); // Disable the button

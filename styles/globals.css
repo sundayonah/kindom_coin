@@ -132,7 +132,7 @@ hr {
   white-space: nowrap;
 }
 button:disabled {
-  background-color: gray;
+  /* background-color: gray; */
   color: white;
   cursor: not-allowed;
 }
@@ -213,8 +213,8 @@ button:disabled {
   outline: none;
   cursor: pointer;
   color: #ffffff;
-  background-color: gray;
-  /* background-color: #daa851; */
+  /* background-color: gray; */
+  background-color: #daa851;
 }
 /* .buy {
   margin-top: 1.5rem;
