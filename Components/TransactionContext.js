@@ -35,7 +35,7 @@ export const TransactionProvider = ({ children }) => {
   const [kcLoading, setKcLoading] = useState(false);
   const [switchButton, setSwitchButton] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [isNextClaimDate, setIsNextClaimDate] = useState(true);
+  const [isNextClaimDate, setIsNextClaimDate] = useState(false);
   const [bnbBalance, setBnbBalance] = useState("");
   const [busdBalance, setBusdBalance] = useState("");
   const [isSale, setIsSale] = useState(false);
