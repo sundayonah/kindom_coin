@@ -307,7 +307,7 @@ export default function MyComponent() {
             </div>
             <div className="contentForText">
               <p>Next Claim Amount</p>
-              <strong> {nextClaimAmount}</strong>
+              <strong> {nextClaimAmount} TKC</strong>
             </div>
             <div className="contentForText">
               <p>Next Claim Time</p>

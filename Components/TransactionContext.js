@@ -283,6 +283,8 @@ export const TransactionProvider = ({ children }) => {
     LockedFunds();
   }, []);
 
+  let formattedNextClaimTime;
+
   //USERSTORAGE
   useEffect(() => {
     const UserStorage = async () => {
@@ -314,24 +316,13 @@ export const TransactionProvider = ({ children }) => {
         // TOTAL CLAIM
         const max0 = max[0];
         const TotalClaim = ethers.utils.formatUnits(max0, "ether");
-        const formattedTotalClaim = TotalClaim.toLocaleString();
-        setTotalClaim(formattedTotalClaim);
+        const formattedTotalClaim = parseFloat(TotalClaim.toString());
+        setTotalClaim(formattedTotalClaim.toFixed(3));
+        console.log(formattedNextClaimTime);
 
         // next claim amount = amount in price / 4
         let priceAmount = amountInPrice / 4;
         setNextClaimAmonut(priceAmount);
-
-        // const max2 = max[2];
-        // const AmountInPrice = ethers.utils.formatUnits(max2, "ether");
-        // const formattedAmountInPrice = parseFloat(AmountInPrice.toString());
-        // setAmountInPrice(formattedAmountInPrice.toFixed());
-        // console.log(formattedAmountInPrice, "formattedAmountInPrice");
-
-        // //NEXT CLAIM
-        // const max3 = max[3];
-        // const NextClaim = ethers.utils.formatUnits(max3, "ether");
-        // const formattedNextClaim = parseFloat(NextClaim.toString());
-        // setNextClaimAmonut(formattedNextClaim.toFixed());
 
         const UnixEpoch = "1/1/1970, 1:00:00 AM";
 
@@ -341,17 +332,12 @@ export const TransactionProvider = ({ children }) => {
 
         //real Claim Time
         const ClaimTime = new Date(NextClaimTime * 1000);
-        const formattedNextClaimTime = ClaimTime.toLocaleString();
+        const formattedNextClaimTime1 = ClaimTime.toLocaleString();
 
-        //comparing real claim time
-        const timeZero = new Date(NextClaimTime * 1000);
-        const setTimeToZero = timeZero.toLocaleString();
-
-        //check if formattedNextClaimTime === setTimeToZero
-        if (formattedNextClaimTime === setTimeToZero) {
+        if (NextClaimTime == '0') {
           setNextClaimTime("0");
         } else {
-          setNextClaimTime(formattedNextClaimTime);
+          setNextClaimTime(formattedNextClaimTime1);
         }
       } catch (error) {
         console.error(error);
@@ -524,7 +510,7 @@ export const TransactionProvider = ({ children }) => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(
-        "0x973B83eee65fBf059344c9989499F3Edb9f4ADF4",
+        newTKContractAddress,
         routerAbi,
         signer
       );
