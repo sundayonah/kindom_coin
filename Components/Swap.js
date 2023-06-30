@@ -48,6 +48,9 @@ export default function MyComponent() {
     busdBalance,
     setChangeToken,
     IsSaleACtive,
+    sumWithdrawableAmount,
+    amountAlreadyClaimed,
+    amountInPriceMinusTotalClaimed,
   } = useContext(TransactionContext);
 
   // const tokens = [
@@ -295,18 +298,18 @@ export default function MyComponent() {
             <div className="contentForText">
               <p>Amount In Price</p>
               <strong>
-                {amountInPrice} {tkc}
+                {amountAlreadyClaimed} {tkc}
               </strong>
             </div>
             <div className="contentForText">
               <p>Total Claim</p>
               <strong>
-                {totalClaim} {tkc}
+                {sumWithdrawableAmount} {tkc}
               </strong>
             </div>
             <div className="contentForText">
               <p>Next Claim Amount</p>
-              <strong> {nextClaimAmount} TKC</strong>
+              <strong> {amountInPriceMinusTotalClaimed} TKC</strong>
             </div>
             <div className="contentForText">
               <p>Next Claim Time</p>

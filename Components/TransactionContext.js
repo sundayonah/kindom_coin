@@ -40,6 +40,9 @@ export const TransactionProvider = ({ children }) => {
   const [busdBalance, setBusdBalance] = useState("");
   const [isSale, setIsSale] = useState(false);
   const [amountInPrice, setAmountInPrice] = useState("");
+  const [amountAlreadyClaimed, setAmountAlreadyClaimed] = useState("");
+  const [sumWithdrawableAmount, setSumWithdrawableAmount] = useState('')
+  const [amountInPriceMinusTotalClaimed, setAmountInPriceMinusTotalClaimed] = useState('')
   // const [getAmountInPrice, setGetAmountInPrice] = useState()
 
   // const [selectedToken, setSelectedToken] = useState();
@@ -52,6 +55,8 @@ export const TransactionProvider = ({ children }) => {
     
   const bscAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
   const address = useAddress();
+
+  // console.log(address)
 
 
   //message
@@ -286,6 +291,66 @@ export const TransactionProvider = ({ children }) => {
     LockedFunds();
   }, []);
 
+
+    //getSumWithdrawableAmount
+    useEffect(() => {
+      const GetSumWithdrawableAmount = async () => {
+        try {
+          // const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const provider = new ethers.getDefaultProvider(
+            "https://bsc-dataseed1.binance.org/"
+          );
+          // const signer = provider.getSigner();
+          const profile = new ethers.Contract(
+            newTKContractAddress,
+            theKingdomAbi,
+            provider
+          );
+          const max = await profile.getSumWithdrawableAmount(address);
+          const sumWithdrawable = ethers.utils.formatUnits(max, "ether");
+          const formattedSumWithdrawable = parseFloat(sumWithdrawable.toString());
+          setSumWithdrawableAmount(formattedSumWithdrawable.toFixed(2));
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      GetSumWithdrawableAmount();
+    }, [address]);
+
+   //getAmountAlreadyClaimed
+   useEffect(() => {
+    const getAmountAlreadyClaimed = async () => {
+      try {
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.getDefaultProvider(
+          "https://bsc-dataseed1.binance.org/"
+        );
+        // const signer = provider.getSigner();
+        const profile = new ethers.Contract(
+          newTKContractAddress,
+          theKingdomAbi,
+          provider
+        );
+        const max = await profile.getAmountAlreadyClaimed(address);
+        const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
+        const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
+        setAmountAlreadyClaimed(formattedAmountAlreadyClaimed.toFixed(2));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAmountAlreadyClaimed();
+  }, [address]);
+  
+
+  //totalAmountInPriceMinusTotalClaimed
+  const totalAmountInPriceMinusTotalClaimed =  amountAlreadyClaimed - sumWithdrawableAmount
+  useEffect(() => {
+    setAmountInPriceMinusTotalClaimed(totalAmountInPriceMinusTotalClaimed);
+  }, [totalAmountInPriceMinusTotalClaimed])
+  
+  
+
   let formattedNextClaimTime;
 
   //USERSTORAGE
@@ -303,31 +368,30 @@ export const TransactionProvider = ({ children }) => {
           provider
         );
         const max = await profile.userStorage(address);
-
         // amount in price = getSumWithdrawableAmount(address) ✅
         // const userStore = userStorage(address) ✅
         // total claim = userStore[0]; ✅
         // next claim amount = amount in price / 4 ✅
         // next claim time = userStore[2] ✅
 
-        //GetAmountInPrice
-        const getAmount = await profile.getSumWithdrawableAmount(address);
-        const fundLock = ethers.utils.formatUnits(getAmount, "ether");
-        const formattedLock = parseFloat(fundLock.toString());
-        setAmountInPrice(formattedLock.toFixed(3));
+        // //GetAmountInPrice
+        // const getAmount = await profile.getSumWithdrawableAmount(address);
+        // const fundLock = ethers.utils.formatUnits(getAmount, "ether");
+        // const formattedLock = parseFloat(fundLock.toString());
+        // setAmountInPrice(formattedLock.toFixed(3));
 
-        // TOTAL CLAIM
-        const max0 = max[0];
-        const TotalClaim = ethers.utils.formatUnits(max0, "ether");
-        const formattedTotalClaim = parseFloat(TotalClaim.toString());
-        setTotalClaim(formattedTotalClaim.toFixed(3));
-        console.log(formattedNextClaimTime);
+        // // TOTAL CLAIM
+        // const max0 = max[0];
+        // const TotalClaim = ethers.utils.formatUnits(max0, "ether");
+        // const formattedTotalClaim = parseFloat(TotalClaim.toString());
+        // setTotalClaim(formattedTotalClaim.toFixed(3));
+        // console.log(formattedNextClaimTime);
 
         // next claim amount = amount in price / 4
         // let priceAmount = amountInPrice / 4;
-        setNextClaimAmonut(amountInPrice);
+        // setNextClaimAmonut(amountInPrice);
 
-        const UnixEpoch = "1/1/1970, 1:00:00 AM";
+        // const UnixEpoch = "1/1/1970, 1:00:00 AM";
 
         // NEXT CLAIM TIME
         const max4 = max[2];
@@ -550,6 +614,9 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        sumWithdrawableAmount,
+        amountAlreadyClaimed,
+        amountInPriceMinusTotalClaimed,
         amountInPrice,
         expectedLock,
         isSale,
