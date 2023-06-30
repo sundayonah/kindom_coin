@@ -139,7 +139,6 @@ export default function MyComponent() {
       >
         <div className="modalContent">
           {tokens.map((e, i) => {
-            // console.log(e.img, "img");
             return (
               <div
                 key={i}

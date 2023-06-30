@@ -47,9 +47,12 @@ export const TransactionProvider = ({ children }) => {
   // let BUSD = "0xab1a4d4f1d656d2450692d237fdd6c7f9146e814";
 
   const contractAddress = "0xd6243011626ac6765Cb398B9Ed7cbEAbE7c5Ee19";
-  const newTKContractAddress = "0xe3a85ee627538aE4a16243E5534426866525BB37";
+  const newTKContractAddress = "0xDB3BD38A44D6AA699268a95C66734b105e113F19";
+  // const newTKContractAddress = "0xe3a85ee627538aE4a16243E5534426866525BB37";
+    
   const bscAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
   const address = useAddress();
+
 
   //message
   const [messageApi, contextHolder] = message.useMessage();
@@ -321,8 +324,8 @@ export const TransactionProvider = ({ children }) => {
         console.log(formattedNextClaimTime);
 
         // next claim amount = amount in price / 4
-        let priceAmount = amountInPrice / 4;
-        setNextClaimAmonut(priceAmount);
+        // let priceAmount = amountInPrice / 4;
+        setNextClaimAmonut(amountInPrice);
 
         const UnixEpoch = "1/1/1970, 1:00:00 AM";
 
