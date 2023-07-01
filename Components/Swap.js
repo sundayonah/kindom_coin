@@ -315,6 +315,9 @@ export default function MyComponent() {
               <p>Next Claim Time</p>
               <strong> {nextClaimTime}</strong>
             </div>
+
+            {amountAlreadyClaimed && (
+              
             <div className="claimButton">
               {/* <button
                 onClick={() => handleClaim()}
@@ -334,6 +337,8 @@ export default function MyComponent() {
                   "CLAIM"
                 )}
               </button> */}
+                
+          
               <button
                 onClick={() => handleClaim()}
                 className={isNextClaimDate ? "disAble" : "claim"}
@@ -354,6 +359,8 @@ export default function MyComponent() {
                 )}
               </button>
             </div>
+              )}
+
           </div>
           <div>
             <div className="progress">

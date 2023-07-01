@@ -328,16 +328,36 @@ export const TransactionProvider = ({ children }) => {
           theKingdomAbi,
           provider
         );
-        const max = await profile.getAmountAlreadyClaimed(address);
-        const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
-        const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
-        setAmountAlreadyClaimed(formattedAmountAlreadyClaimed.toFixed(2));
+        const alreadyClaimed = await profile.claimed(address)
+        console.log(alreadyClaimed)
+
+       if(alreadyClaimed){
+         const max = await profile.getAmountAlreadyClaimed(address);
+         const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
+         const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
+         setAmountAlreadyClaimed(formattedAmountAlreadyClaimed.toFixed(2));
+         console.log(formattedAmountAlreadyClaimed)
+        } else {
+          setAmountAlreadyClaimed('0.00')
+        }
       } catch (error) {
         console.error(error);
       }
     };
     getAmountAlreadyClaimed();
   }, [address]);
+  
+          // console.log(alreadyClaimed)
+  
+          // // if alreadyClaimed is true and max is greater than zero then return immediately and continue the process
+          // if (alreadyClaimed == true) {
+          //   return;
+          // }
+  
+  
+          //so there is a function from the contract called
+          //claimed(user) if it == true then user has claimed.
+          //then we can display result coming from getAmountAlreadyClaimed(user) in total claim.
   
 
   //totalAmountInPriceMinusTotalClaimed
@@ -365,6 +385,8 @@ export const TransactionProvider = ({ children }) => {
           provider
         );
         const max = await profile.userStorage(address);
+      
+
         // amount in price = getSumWithdrawableAmount(address) ✅
         // const userStore = userStorage(address) ✅
         // total claim = userStore[0]; ✅
