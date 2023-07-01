@@ -340,13 +340,11 @@ export const TransactionProvider = ({ children }) => {
          const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
          const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
          setAmountAlreadyClaimed(formattedAmountAlreadyClaimed.toFixed(2));
-         console.log(formattedAmountAlreadyClaimed)
         } else {
           const max = await contractInstance.getSumWithdrawableAmount(address);
           const sumWithdrawable = ethers.utils.formatUnits(max, "ether");
           const formattedSumWithdrawable = parseFloat(sumWithdrawable.toString());
           setSumWithdrawableAmount(formattedSumWithdrawable.toFixed(2));
-          console.log(formattedSumWithdrawable)
         }
       } catch (error) {
         console.error(error);
