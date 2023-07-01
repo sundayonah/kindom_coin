@@ -329,14 +329,11 @@ export const TransactionProvider = ({ children }) => {
           provider
         );
         const alreadyClaimed = await profile.claimed(address)
-        console.log(alreadyClaimed)
-
        if(alreadyClaimed){
          const max = await profile.getAmountAlreadyClaimed(address);
          const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
          const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
          setAmountAlreadyClaimed(formattedAmountAlreadyClaimed.toFixed(2));
-         console.log(formattedAmountAlreadyClaimed)
         } else {
           setAmountAlreadyClaimed('0.00')
         }
