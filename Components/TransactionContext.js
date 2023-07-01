@@ -130,8 +130,8 @@ export const TransactionProvider = ({ children }) => {
           "https://bsc-dataseed1.binance.org/"
         );
         // const signer = provider.getSigner();
-        const profile = new ethers.Contract(bscAddress, bscAbi, provider);
-        const bal = await profile.balanceOf(address);
+        const contractInstance = new ethers.Contract(bscAddress, bscAbi, provider);
+        const bal = await contractInstance.balanceOf(address);
         const balance = ethers.utils.formatEther(bal, "ether");
         const etherAmountAsNumber = parseFloat(balance.toString());
         const roundedEtherAmount = etherAmountAsNumber.toFixed(3);
@@ -172,8 +172,8 @@ export const TransactionProvider = ({ children }) => {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const profile = new ethers.Contract(contractAddress, routerAbi, signer);
-        const max = await profile.price();
+        const contractInstance = new ethers.Contract(contractAddress, routerAbi, signer);
+        const max = await contractInstance.price();
         const maxPrice = ethers.utils.formatEther(max, "ether");
         const formattedPrice = parseFloat(maxPrice.toLocaleString());
         // const rounddedkcPrice = formattedPrice.toFixed(6);
@@ -196,12 +196,12 @@ export const TransactionProvider = ({ children }) => {
         );
 
         // const signer = provider.getSigner();
-        const profile = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           contractAddress,
           routerAbi,
           provider
         );
-        const max = await profile.minLockForEachUser();
+        const max = await contractInstance.minLockForEachUser();
         const minlock = ethers.utils.formatUnits(max, "ether");
         const formattedMinLock = minlock.toLocaleString();
         setMinLock(formattedMinLock);
@@ -222,12 +222,12 @@ export const TransactionProvider = ({ children }) => {
           "https://bsc-dataseed1.binance.org/"
         );
         // const signer = provider.getSigner();
-        const profile = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           contractAddress,
           routerAbi,
           provider
         );
-        const max = await profile.maxLockForEachUser();
+        const max = await contractInstance.maxLockForEachUser();
         const maxlock = ethers.utils.formatUnits(max, "ether");
         const formattedMaxLock = maxlock.toLocaleString();
         setMaxLock(formattedMaxLock);
@@ -247,12 +247,12 @@ export const TransactionProvider = ({ children }) => {
           "https://bsc-dataseed1.binance.org/"
         );
         // const signer = provider.getSigner();
-        const profile = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           contractAddress,
           routerAbi,
           provider
         );
-        const max = await profile.expectedTotalLockFunds();
+        const max = await contractInstance.expectedTotalLockFunds();
         const expectedlock = ethers.utils.formatUnits(max, "ether");
         const formattedExpectedLock = expectedlock.toLocaleString();
         setExpectedLock(formattedExpectedLock);
@@ -272,12 +272,12 @@ export const TransactionProvider = ({ children }) => {
           "https://bsc-dataseed1.binance.org/"
         );
         // const signer = provider.getSigner();
-        const profile = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           contractAddress,
           routerAbi,
           provider
         );
-        const max = await profile.lockedFunds();
+        const max = await contractInstance.lockedFunds();
         const fundLock = ethers.utils.formatUnits(max, "ether");
         const formattedLock = parseFloat(fundLock.toString());
         setLockFund(formattedLock.toFixed(2));
@@ -289,30 +289,30 @@ export const TransactionProvider = ({ children }) => {
   }, []);
 
 
-    //getSumWithdrawableAmount
-    useEffect(() => {
-      const GetSumWithdrawableAmount = async () => {
-        try {
-          // const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const provider = new ethers.getDefaultProvider(
-            "https://bsc-dataseed1.binance.org/"
-          );
-          // const signer = provider.getSigner();
-          const profile = new ethers.Contract(
-            newTKContractAddress,
-            theKingdomAbi,
-            provider
-          );
-          const max = await profile.getSumWithdrawableAmount(address);
-          const sumWithdrawable = ethers.utils.formatUnits(max, "ether");
-          const formattedSumWithdrawable = parseFloat(sumWithdrawable.toString());
-          setSumWithdrawableAmount(formattedSumWithdrawable.toFixed(2));
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      GetSumWithdrawableAmount();
-    }, [address]);
+    // //getSumWithdrawableAmount
+    // useEffect(() => {
+    //   const GetSumWithdrawableAmount = async () => {
+    //     try {
+    //       // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    //       const provider = new ethers.getDefaultProvider(
+    //         "https://bsc-dataseed1.binance.org/"
+    //       );
+    //       // const signer = provider.getSigner();
+    //       const contractInstance = new ethers.Contract(
+    //         newTKContractAddress,
+    //         theKingdomAbi,
+    //         provider
+    //       );
+    //       const max = await contractInstance.getSumWithdrawableAmount(address);
+    //       const sumWithdrawable = ethers.utils.formatUnits(max, "ether");
+    //       const formattedSumWithdrawable = parseFloat(sumWithdrawable.toString());
+    //       setSumWithdrawableAmount(formattedSumWithdrawable.toFixed(2));
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+    //   };
+    //   GetSumWithdrawableAmount();
+    // }, [address]);
 
    //getAmountAlreadyClaimed
    useEffect(() => {
@@ -323,19 +323,24 @@ export const TransactionProvider = ({ children }) => {
           "https://bsc-dataseed1.binance.org/"
         );
         // const signer = provider.getSigner();
-        const profile = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           newTKContractAddress,
           theKingdomAbi,
           provider
         );
-        const alreadyClaimed = await profile.claimed(address)
+        const alreadyClaimed = await contractInstance.claimed(address)
        if(alreadyClaimed){
-         const max = await profile.getAmountAlreadyClaimed(address);
+         const max = await contractInstance.getAmountAlreadyClaimed(address);
          const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
          const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
          setAmountAlreadyClaimed(formattedAmountAlreadyClaimed.toFixed(2));
+         console.log(formattedAmountAlreadyClaimed)
         } else {
-          setAmountAlreadyClaimed('0.00')
+          const max = await contractInstance.getSumWithdrawableAmount(address);
+          const sumWithdrawable = ethers.utils.formatUnits(max, "ether");
+          const formattedSumWithdrawable = parseFloat(sumWithdrawable.toString());
+          setSumWithdrawableAmount(formattedSumWithdrawable.toFixed(2));
+          console.log(formattedSumWithdrawable)
         }
       } catch (error) {
         console.error(error);
@@ -376,12 +381,12 @@ export const TransactionProvider = ({ children }) => {
           "https://bsc-dataseed1.binance.org/"
         );
         // const signer = provider.getSigner();
-        const profile = new ethers.Contract(
+        const contractInstance = new ethers.Contract(
           newTKContractAddress,
           theKingdomAbi,
           provider
         );
-        const max = await profile.userStorage(address);
+        const max = await contractInstance.userStorage(address);
       
 
         // amount in price = getSumWithdrawableAmount(address) ✅
@@ -391,7 +396,7 @@ export const TransactionProvider = ({ children }) => {
         // next claim time = userStore[2] ✅
 
         // //GetAmountInPrice
-        // const getAmount = await profile.getSumWithdrawableAmount(address);
+        // const getAmount = await contractInstance.getSumWithdrawableAmount(address);
         // const fundLock = ethers.utils.formatUnits(getAmount, "ether");
         // const formattedLock = parseFloat(fundLock.toString());
         // setAmountInPrice(formattedLock.toFixed(3));
@@ -435,9 +440,9 @@ export const TransactionProvider = ({ children }) => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const profile = new ethers.Contract(bscAddress, bscAbi, signer);
+      const contractInstance = new ethers.Contract(bscAddress, bscAbi, signer);
       const value = ethers.utils.parseUnits(v1, "ether");
-      const tx = await profile.approve(contractAddress, value, {
+      const tx = await contractInstance.approve(contractAddress, value, {
         gasLimit: 51000,
       });
 

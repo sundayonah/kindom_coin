@@ -316,7 +316,7 @@ export default function MyComponent() {
               <strong> {nextClaimTime}</strong>
             </div>
 
-            {amountAlreadyClaimed && (
+            {/* {amountAlreadyClaimed && ( */}
               
             <div className="claimButton">
               {/* <button
@@ -359,7 +359,7 @@ export default function MyComponent() {
                 )}
               </button>
             </div>
-              )}
+              {/* )} */}
 
           </div>
           <div>
