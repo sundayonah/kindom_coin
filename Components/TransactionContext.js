@@ -40,9 +40,11 @@ export const TransactionProvider = ({ children }) => {
   const [busdBalance, setBusdBalance] = useState("");
   const [isSale, setIsSale] = useState(false);
   const [amountInPrice, setAmountInPrice] = useState("");
-  const [amountAlreadyClaimed, setAmountAlreadyClaimed] = useState("");
+  const [amountAlreadyClaimed, setAmountAlreadyClaimed] = useState("0.00");
   const [sumWithdrawableAmount, setSumWithdrawableAmount] = useState('')
   const [amountInPriceMinusTotalClaimed, setAmountInPriceMinusTotalClaimed] = useState('')
+  const [alreadyClaimed, setAlreadyClaimed] = useState(false);
+
   // const [getAmountInPrice, setGetAmountInPrice] = useState()
 
   // const [selectedToken, setSelectedToken] = useState();
@@ -314,6 +316,8 @@ export const TransactionProvider = ({ children }) => {
     //   GetSumWithdrawableAmount();
     // }, [address]);
 
+
+
    //getAmountAlreadyClaimed
    useEffect(() => {
     const getAmountAlreadyClaimed = async () => {
@@ -329,6 +333,8 @@ export const TransactionProvider = ({ children }) => {
           provider
         );
         const alreadyClaimed = await contractInstance.claimed(address)
+        setAlreadyClaimed(alreadyClaimed);
+
        if(alreadyClaimed){
          const max = await contractInstance.getAmountAlreadyClaimed(address);
          const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
@@ -635,6 +641,7 @@ export const TransactionProvider = ({ children }) => {
   return (
     <TransactionContext.Provider
       value={{
+        alreadyClaimed,
         sumWithdrawableAmount,
         amountAlreadyClaimed,
         amountInPriceMinusTotalClaimed,

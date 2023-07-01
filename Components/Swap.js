@@ -51,6 +51,7 @@ export default function MyComponent() {
     sumWithdrawableAmount,
     amountAlreadyClaimed,
     amountInPriceMinusTotalClaimed,
+    alreadyClaimed,
   } = useContext(TransactionContext);
 
   // const tokens = [
@@ -316,7 +317,7 @@ export default function MyComponent() {
               <strong> {nextClaimTime}</strong>
             </div>
 
-            {/* {amountAlreadyClaimed && ( */}
+            {!alreadyClaimed && (
               
             <div className="claimButton">
               {/* <button
@@ -359,7 +360,7 @@ export default function MyComponent() {
                 )}
               </button>
             </div>
-              {/* )} */}
+              )} 
 
           </div>
           <div>
