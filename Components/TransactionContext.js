@@ -298,11 +298,11 @@ export const TransactionProvider = ({ children }) => {
           theKingdomAbi,
           provider
         );
-        const alreadyClaimed = await contractInstance.claimed(testAddress1)
+        const alreadyClaimed = await contractInstance.claimed(testAddress2)
         setAlreadyClaimed(alreadyClaimed);
 
         console.log(alreadyClaimed)
-         const max = await contractInstance.getAmountAlreadyClaimed(testAddress1);
+         const max = await contractInstance.getAmountAlreadyClaimed(testAddress2);
          const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
          const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
 
@@ -311,7 +311,7 @@ export const TransactionProvider = ({ children }) => {
          setAmountAlreadyClaimed(formattedAmountAlreadyClaimed.toFixed(2));
          setSumWithdrawableAmount(formattedAmountAlreadyClaimed.toFixed(2));
         } else {
-          const max = await contractInstance.getSumWithdrawableAmount(testAddress1);
+          const max = await contractInstance.getSumWithdrawableAmount(testAddress2);
           const sumWithdrawable = ethers.utils.formatUnits(max, "ether");
           const formattedSumWithdrawable = parseFloat(sumWithdrawable.toString());
           const totalAmountInPriceMinusTotalClaimed =  amountAlreadyClaimed - sumWithdrawable
