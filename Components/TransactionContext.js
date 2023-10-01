@@ -301,7 +301,7 @@ export const TransactionProvider = ({ children }) => {
         const alreadyClaimed = await contractInstance.claimed(address)
         setAlreadyClaimed(alreadyClaimed);
 
-        console.log(alreadyClaimed)
+       
          const max = await contractInstance.getAmountAlreadyClaimed(address);
          const amountAlreadyClaimed = ethers.utils.formatUnits(max, "ether");
          const formattedAmountAlreadyClaimed = parseFloat(amountAlreadyClaimed.toString());
